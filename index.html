@@ -1736,14 +1736,16 @@ if (firebaseReady && database) {
             document.getElementById('racingTrack').style.transform = `translateX(${progress * 2}px)`;
 
             if (currentQuestion < game.questions.length - 1) {
-                document.getElementById('game1SubmitBtn').textContent = '다음 문제';
-                document.getElementById('game1SubmitBtn').onclick = () => {
-                    loadQuestion(1, currentQuestion + 1);
-                };
-            } else {
-                document.getElementById('game1SubmitBtn').textContent = '게임 완료';
-                document.getElementById('game1SubmitBtn').onclick = () => endGame(1);
-            }
+    document.getElementById('game1SubmitBtn').disabled = false;  // ← 이 줄 추가!
+    document.getElementById('game1SubmitBtn').textContent = '다음 문제';
+    document.getElementById('game1SubmitBtn').onclick = () => {
+        loadQuestion(1, currentQuestion + 1);
+    };
+} else {
+    document.getElementById('game1SubmitBtn').disabled = false;  // ← 이 줄도 추가!
+    document.getElementById('game1SubmitBtn').textContent = '게임 완료';
+    document.getElementById('game1SubmitBtn').onclick = () => endGame(1);
+}
         }
 
         // ============ GAME 2: RESOURCE ALLOCATION ============
@@ -1800,14 +1802,16 @@ if (firebaseReady && database) {
             document.getElementById('game2SubmitBtn').disabled = true;
 
             if (currentQuestion < game.scenarios.length - 1) {
-                document.getElementById('game2SubmitBtn').textContent = '다음 상황';
-                document.getElementById('game2SubmitBtn').onclick = () => {
-                    loadGame2Question(currentQuestion + 1);
-                };
-            } else {
-                document.getElementById('game2SubmitBtn').textContent = '게임 완료';
-                document.getElementById('game2SubmitBtn').onclick = () => endGame(2);
-            }
+    document.getElementById('game2SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game2SubmitBtn').textContent = '다음 상황';
+    document.getElementById('game2SubmitBtn').onclick = () => {
+        loadGame2Question(currentQuestion + 1);
+    };
+} else {
+    document.getElementById('game2SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game2SubmitBtn').textContent = '게임 완료';
+    document.getElementById('game2SubmitBtn').onclick = () => endGame(2);
+}
         }
 
         // ============ GAME 3: TIMING CHOICE ============
@@ -1863,14 +1867,16 @@ if (firebaseReady && database) {
             document.getElementById('game3SubmitBtn').disabled = true;
 
             if (currentQuestion < game.scenarios.length - 1) {
-                document.getElementById('game3SubmitBtn').textContent = '다음 상황';
-                document.getElementById('game3SubmitBtn').onclick = () => {
-                    loadGame3Question(currentQuestion + 1);
-                };
-            } else {
-                document.getElementById('game3SubmitBtn').textContent = '게임 완료';
-                document.getElementById('game3SubmitBtn').onclick = () => endGame(3);
-            }
+    document.getElementById('game3SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game3SubmitBtn').textContent = '다음 상황';
+    document.getElementById('game3SubmitBtn').onclick = () => {
+        loadGame3Question(currentQuestion + 1);
+    };
+} else {
+    document.getElementById('game3SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game3SubmitBtn').textContent = '게임 완료';
+    document.getElementById('game3SubmitBtn').onclick = () => endGame(3);
+}
         }
 
         // ============ GAME 4: CUSTOMER SATISFACTION ============
@@ -1928,14 +1934,16 @@ if (firebaseReady && database) {
             document.getElementById('game4SubmitBtn').disabled = true;
 
             if (currentQuestion < game.scenarios.length - 1) {
-                document.getElementById('game4SubmitBtn').textContent = '다음 상황';
-                document.getElementById('game4SubmitBtn').onclick = () => {
-                    loadGame4Question(currentQuestion + 1);
-                };
-            } else {
-                document.getElementById('game4SubmitBtn').textContent = '게임 완료';
-                document.getElementById('game4SubmitBtn').onclick = () => endGame(4);
-            }
+    document.getElementById('game4SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game4SubmitBtn').textContent = '다음 상황';
+    document.getElementById('game4SubmitBtn').onclick = () => {
+        loadGame4Question(currentQuestion + 1);
+    };
+} else {
+    document.getElementById('game4SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game4SubmitBtn').textContent = '게임 완료';
+    document.getElementById('game4SubmitBtn').onclick = () => endGame(4);
+}
         }
 
         // ============ GAME 5: COMPETITOR CHASE ============
@@ -1988,14 +1996,16 @@ if (firebaseReady && database) {
 
             const game = gameData[5];
             if (currentQuestion < game.scenarios.length - 1) {
-                document.getElementById('game5SubmitBtn').textContent = '다음 라운드';
-                document.getElementById('game5SubmitBtn').onclick = () => {
-                    loadGame5Question(currentQuestion + 1);
-                };
-            } else {
-                document.getElementById('game5SubmitBtn').textContent = '게임 완료';
-                document.getElementById('game5SubmitBtn').onclick = () => endGame(5);
-            }
+    document.getElementById('game5SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game5SubmitBtn').textContent = '다음 라운드';
+    document.getElementById('game5SubmitBtn').onclick = () => {
+        loadGame5Question(currentQuestion + 1);
+    };
+} else {
+    document.getElementById('game5SubmitBtn').disabled = false;  // ← 추가!
+    document.getElementById('game5SubmitBtn').textContent = '게임 완료';
+    document.getElementById('game5SubmitBtn').onclick = () => endGame(5);
+}
         }
 
         // ============ SOS FUNCTION ============
