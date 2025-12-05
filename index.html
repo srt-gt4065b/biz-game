@@ -1074,14 +1074,31 @@
             appId: "1:684783051834:web:e22161ac5498a23ae10103"
         };
 
-        // Firebase 초기화
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
+// Firebase 상태 확인
+let database = null;
+let firebaseReady = false;
 
-        // Firebase 연결 상태 모니터링
-        const connectedRef = database.ref('.info/connected');
-        connectedRef.on('value', (snap) => {
-            const statusEl = document.getElementById('firebaseStatus');
+// Firebase 초기화
+if (typeof firebase !== 'undefined') {
+    try {
+        firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        firebaseReady = true;
+        console.log('✅ Firebase 연결 성공!');
+    } catch (error) {
+        console.error('Firebase 초기화 실패:', error);
+        firebaseReady = false;
+    }
+} else {
+    console.warn('⚠️ Firebase SDK 로드 실패');
+}
+
+// Firebase 연결 상태 모니터링
+if (firebaseReady && database) {
+    const connectedRef = database.ref('.info/connected');
+    connectedRef.on('value', (snap) => {
+        const statusEl = document.getElementById('firebaseStatus');
+        if (statusEl) {
             if (snap.val() === true) {
                 statusEl.textContent = '🟢 Firebase 연결됨';
                 statusEl.classList.remove('disconnected');
@@ -1091,7 +1108,9 @@
                 statusEl.classList.remove('connected');
                 statusEl.classList.add('disconnected');
             }
-        });
+        }
+    });
+}
 
         // ============ GAME DATA ============
         const gameData = {
@@ -1437,41 +1456,32 @@
             }
         }
 
-        function loginStudent() {
-            const name = document.getElementById('studentName').value.trim();
-            const school = document.getElementById('highSchool').value.trim();
-            const email = document.getElementById('email').value.trim();
+       function loginStudent() {
+    const name = document.getElementById('studentName').value.trim();
+    const school = document.getElementById('highSchool').value.trim();
+    const email = document.getElementById('email').value.trim();
 
-            if (!name || !school || !email) {
-                alert('모든 정보를 입력해주세요!');
-                return;
-            }
+    if (!name || !school || !email) {
+        alert('모든 정보를 입력해주세요!');
+        return;
+    }
 
-            studentInfo = { 
-                name, 
-                school, 
-                email,
-                sessionId: generateSessionId()
-            };
-            
-            // Firebase에 학생 정보 저장
-            database.ref('students/' + studentInfo.sessionId).set({
-                name: name,
-                school: school,
-                email: email,
-                loginTime: new Date().toISOString(),
-                status: 'active',
-                currentGame: 'none',
-                score: 0,
-                sosRequests: []
-            });
+    studentInfo = { 
+        name, 
+        school, 
+        email,
+        sessionId: generateSessionId()
+    };
+    
+    // Firebase에 학생 정보 저장
+    saveStudentInfo(studentInfo.sessionId, name, school, email);
 
-            document.getElementById('welcomeName').textContent = name;
-            document.getElementById('welcomeSchool').textContent = school;
-            document.getElementById('welcomeEmail').textContent = email;
+    document.getElementById('welcomeName').textContent = name;
+    document.getElementById('welcomeSchool').textContent = school;
+    document.getElementById('welcomeEmail').textContent = email;
 
-            showPage('.welcome-page');
-        }
+    showPage('.welcome-page');
+}
 
         function loginProfessor() {
             const code = document.getElementById('professorCode').value.trim();
@@ -1603,30 +1613,29 @@
         }
 
         // ============ GAME INITIALIZATION ============
-        function startGame(gameNum) {
-            currentGame = gameNum;
-            currentQuestion = 0;
-            score = 0;
-            totalAnswered = 0;
-            correctAnswers = 0;
-            selectedAnswer = null;
-            timeLeft = 120;
-            gameStartTime = new Date();
+       function startGame(gameNum) {
+    currentGame = gameNum;
+    currentQuestion = 0;
+    score = 0;
+    totalAnswered = 0;
+    correctAnswers = 0;
+    selectedAnswer = null;
+    timeLeft = 120;
+    gameStartTime = new Date();
 
-            // Firebase에 학생 게임 상태 업데이트
-            database.ref('students/' + studentInfo.sessionId).update({
-                currentGame: gameData[gameNum].name,
-                status: 'playing'
-            });
+    // Firebase에 게임 상태 업데이트
+    if (firebaseReady) {
+        updateGameStatus(studentInfo.sessionId, gameData[gameNum].name, 0);
+    }
 
-            document.querySelectorAll('.game-page').forEach(p => p.style.display = 'none');
-            document.getElementById('game' + gameNum).style.display = 'block';
-            
-            showPage('#game' + gameNum);
-            
-            loadQuestion(gameNum, 0);
-            startTimer(gameNum);
-        }
+    document.querySelectorAll('.game-page').forEach(p => p.style.display = 'none');
+    document.getElementById('game' + gameNum).style.display = 'block';
+    
+    showPage('#game' + gameNum);
+    
+    loadQuestion(gameNum, 0);
+    startTimer(gameNum);
+}
 
         function startTimer(gameNum) {
             if (timerInterval) clearInterval(timerInterval);
@@ -1991,29 +2000,125 @@
 
         // ============ SOS FUNCTION ============
         function callSOS(game) {
-            const sosBtn = event.target;
-            
-            // Firebase에 SOS 요청 저장
-            const sosId = 'sos_' + Date.now();
-            database.ref('sos/' + sosId).set({
-                studentId: studentInfo.sessionId,
-                studentName: studentInfo.name,
-                game: game,
-                timestamp: new Date().toISOString(),
-                resolved: false
-            });
+    const sosBtn = event.target;
+    
+    // Firebase에 SOS 요청 저장
+    if (firebaseReady) {
+        saveSOS(studentInfo.sessionId, studentInfo.name, game);
+    }
 
-            // 버튼 시각적 피드백
-            sosBtn.textContent = '✅ SOS 요청됨!';
-            sosBtn.classList.add('active');
-            
-            setTimeout(() => {
-                sosBtn.textContent = '🆘 SOS';
-                sosBtn.classList.remove('active');
-            }, 2000);
+    // 버튼 시각적 피드백
+    sosBtn.textContent = '✅ SOS 요청됨!';
+    sosBtn.classList.add('active');
+    
+    setTimeout(() => {
+        sosBtn.textContent = '🆘 SOS';
+        sosBtn.classList.remove('active');
+    }, 2000);
 
-            alert('🆘 SOS 요청이 교수님께 전달되었습니다!\n\n곧 도움을 받으실 수 있습니다.');
-        }
+    alert('🆘 SOS 요청이 교수님께 전달되었습니다!\n\n곧 도움을 받으실 수 있습니다.');
+}
+        // ============ FIREBASE HELPER FUNCTIONS ============
+
+// 학생 정보 저장
+function saveStudentInfo(sessionId, name, school, email) {
+    if (!firebaseReady || !database) {
+        console.warn('Firebase가 준비되지 않았습니다');
+        return;
+    }
+    
+    database.ref('students/' + sessionId).set({
+        name: name,
+        school: school,
+        email: email,
+        loginTime: new Date().toISOString(),
+        status: 'active',
+        currentGame: 'none',
+        score: 0,
+        sosRequests: []
+    }).catch(error => {
+        console.error('학생 정보 저장 실패:', error);
+    });
+}
+
+// 게임 상태 업데이트
+function updateGameStatus(sessionId, gameName, score) {
+    if (!firebaseReady || !database) return;
+    
+    database.ref('students/' + sessionId).update({
+        currentGame: gameName,
+        score: score,
+        lastUpdate: new Date().toISOString()
+    }).catch(error => {
+        console.error('게임 상태 업데이트 실패:', error);
+    });
+}
+
+// SOS 요청 저장
+function saveSOS(sessionId, studentName, game) {
+    if (!firebaseReady || !database) {
+        alert('Firebase가 연결되지 않았습니다. 나중에 다시 시도하세요.');
+        return;
+    }
+    
+    const sosId = 'sos_' + Date.now();
+    database.ref('sos/' + sosId).set({
+        studentId: sessionId,
+        studentName: studentName,
+        game: game,
+        timestamp: new Date().toISOString(),
+        resolved: false
+    }).catch(error => {
+        console.error('SOS 저장 실패:', error);
+    });
+}
+
+// 게임 결과 저장
+function saveGameResult(sessionId, gameName, score, accuracy, time) {
+    if (!firebaseReady || !database) return;
+    
+    database.ref('students/' + sessionId).update({
+        lastGame: gameName,
+        lastGameScore: score,
+        accuracy: accuracy,
+        completedTime: new Date().toISOString(),
+        status: 'completed'
+    }).catch(error => {
+        console.error('게임 결과 저장 실패:', error);
+    });
+}
+
+// 대시보드 데이터 로드
+function loadDashboardData(callback) {
+    if (!firebaseReady || !database) {
+        console.warn('Firebase가 준비되지 않았습니다');
+        return;
+    }
+    
+    database.ref('students').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        callback(data);
+    });
+}
+
+// SOS 목록 로드
+function loadSOSList(callback) {
+    if (!firebaseReady || !database) return;
+    
+    database.ref('sos').on('value', (snapshot) => {
+        const data = snapshot.val() || {};
+        callback(data);
+    });
+}
+
+// SOS 요청 해결
+function resolveSOSRequest(requestId) {
+    if (!firebaseReady || !database) return;
+    
+    database.ref('sos/' + requestId).remove().catch(error => {
+        console.error('SOS 삭제 실패:', error);
+    });
+}
     </script>
 </body>
 </html>
