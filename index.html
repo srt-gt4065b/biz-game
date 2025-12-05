@@ -83,7 +83,7 @@
             font-size: 1.05em;
         }
 
-        .form-group input, .form-group select {
+        .form-group input {
             width: 100%;
             padding: 12px 15px;
             border: 2px solid #ddd;
@@ -92,7 +92,7 @@
             transition: border-color 0.3s;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: #667eea;
         }
@@ -112,43 +112,6 @@
 
         .login-btn:hover {
             transform: translateY(-2px);
-        }
-
-        .mode-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .mode-btn {
-            padding: 20px;
-            border: 3px solid #ddd;
-            border-radius: 10px;
-            background: white;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-
-        .mode-btn:hover {
-            border-color: #667eea;
-            background: #f0f4ff;
-        }
-
-        .mode-btn.selected {
-            border-color: #667eea;
-            background: #667eea;
-            color: white;
-        }
-
-        .mode-btn .emoji {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-        }
-
-        .mode-btn h3 {
-            margin-bottom: 5px;
         }
 
         /* ============ WELCOME PAGE ============ */
@@ -591,21 +554,6 @@
             transform: scale(1.05);
         }
 
-        .racing-track {
-            display: flex;
-            gap: 10px;
-            justify-content: space-around;
-            margin: 30px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-        }
-
-        .car {
-            font-size: 3em;
-            transition: all 0.3s;
-        }
-
         .progress-bar {
             width: 100%;
             height: 30px;
@@ -626,26 +574,6 @@
             color: white;
             font-weight: bold;
             font-size: 0.9em;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 40px;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
         }
 
         .firebase-status {
@@ -694,67 +622,37 @@
                 bottom: 20px;
                 right: 20px;
             }
-
-            .mode-selector {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
 <body>
     <!-- Firebase Status Indicator -->
     <div class="firebase-status disconnected" id="firebaseStatus">
-        🔴 Firebase 연결 중...
+        🔴 Firebase 준비중...
     </div>
 
     <div class="container">
-        <!-- ============ MODE SELECTION PAGE ============ -->
+        <!-- ============ LOGIN PAGE ============ -->
         <div class="page login-page active">
             <h1>🎮 경영게임 플랫폼</h1>
             <p class="subtitle">우송대학교 AI경영학과 모의 경영 시뮬레이션</p>
             
-            <div class="mode-selector">
-                <div class="mode-btn selected" onclick="selectMode('student')">
-                    <div class="emoji">👨‍🎓</div>
-                    <h3>학생 모드</h3>
-                    <p>게임에 참여하기</p>
-                </div>
-                <div class="mode-btn" onclick="selectMode('professor')">
-                    <div class="emoji">👨‍🏫</div>
-                    <h3>교수자 모드</h3>
-                    <p>학생 상황 모니터링</p>
-                </div>
+            <div class="form-group">
+                <label for="studentName">👤 성명</label>
+                <input type="text" id="studentName" placeholder="예: 김철수">
             </div>
 
-            <!-- Student Login Form -->
-            <div id="studentForm">
-                <div class="form-group">
-                    <label for="studentName">👤 성명</label>
-                    <input type="text" id="studentName" placeholder="예: 김철수">
-                </div>
-
-                <div class="form-group">
-                    <label for="highSchool">🏫 출신고등학교</label>
-                    <input type="text" id="highSchool" placeholder="예: OO 고등학교">
-                </div>
-
-                <div class="form-group">
-                    <label for="email">📧 이메일</label>
-                    <input type="email" id="email" placeholder="예: student@example.com">
-                </div>
-
-                <button class="login-btn" onclick="loginStudent()">게임 시작하기</button>
+            <div class="form-group">
+                <label for="highSchool">🏫 출신고등학교</label>
+                <input type="text" id="highSchool" placeholder="예: OO 고등학교">
             </div>
 
-            <!-- Professor Login Form -->
-            <div id="professorForm" style="display: none;">
-                <div class="form-group">
-                    <label for="professorCode">🔐 교수자 코드</label>
-                    <input type="password" id="professorCode" placeholder="교수자 코드를 입력하세요">
-                </div>
-
-                <button class="login-btn" onclick="loginProfessor()">대시보드 접속</button>
+            <div class="form-group">
+                <label for="email">📧 이메일</label>
+                <input type="email" id="email" placeholder="예: student@example.com">
             </div>
+
+            <button class="login-btn" onclick="loginStudent()">게임 시작하기</button>
         </div>
 
         <!-- ============ WELCOME PAGE ============ -->
@@ -770,8 +668,8 @@
             <div class="game-intro">
                 <h2>📋 오늘의 미션</h2>
                 <p>✅ 5가지 경영 게임에 도전하세요!</p>
-                <p>✅ 각 게임마다 점수를 획득하세요!</p>
-                <p>✅ 시간 제한: 각 게임당 약 2분</p>
+                <p>✅ 각 게임마다 5문제를 풀고 점수를 획득하세요!</p>
+                <p>✅ 정답 5개 = 100점 만점!</p>
                 <p>✅ 더 높은 점수를 목표로 도전하세요!</p>
                 <p>💡 게임 중 궁금하면 "SOS" 버튼을 클릭하세요!</p>
             </div>
@@ -786,7 +684,7 @@
                 <div class="game-card" onclick="startGame(1)">
                     <div class="emoji">🏎️</div>
                     <h3>마진율 퀴즈 레이싱</h3>
-                    <p>마진율을 계산해서 가장 빨리 도착하세요!</p>
+                    <p>마진율을 계산해서 모든 문제를 풀어보세요!</p>
                 </div>
 
                 <div class="game-card" onclick="startGame(2)">
@@ -833,10 +731,6 @@
             </div>
 
             <div class="game-content">
-                <div class="racing-track" id="racingTrack">
-                    <div class="car">🏎️</div>
-                </div>
-
                 <div class="question-container">
                     <div class="question-number">Q<span id="game1QuestionNum">1</span>/5</div>
                     <div class="question-text" id="game1Question"></div>
@@ -846,7 +740,7 @@
                 </div>
             </div>
 
-            <button class="sos-btn" onclick="callSOS('Game1')">🆘 SOS</button>
+            <button class="sos-btn" onclick="callSOS('마진율 퀴즈')">🆘 SOS</button>
         </div>
 
         <!-- Game 2: Resource Allocation -->
@@ -869,7 +763,6 @@
                 <div class="choice-container">
                     <div class="choice-title" id="game2Scenario"></div>
                     <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
-                        <p>💰 자금: <strong id="game2Budget">1,000만원</strong></p>
                         <p>📊 상황: <strong id="game2Situation"></strong></p>
                     </div>
                 </div>
@@ -882,7 +775,7 @@
                 </div>
             </div>
 
-            <button class="sos-btn" onclick="callSOS('Game2')">🆘 SOS</button>
+            <button class="sos-btn" onclick="callSOS('가상기업 자원배분')">🆘 SOS</button>
         </div>
 
         <!-- Game 3: Timing Choice -->
@@ -914,7 +807,7 @@
                 </div>
             </div>
 
-            <button class="sos-btn" onclick="callSOS('Game3')">🆘 SOS</button>
+            <button class="sos-btn" onclick="callSOS('타이밍 경영 선택')">🆘 SOS</button>
         </div>
 
         <!-- Game 4: Customer Satisfaction -->
@@ -949,7 +842,7 @@
                 </div>
             </div>
 
-            <button class="sos-btn" onclick="callSOS('Game4')">🆘 SOS</button>
+            <button class="sos-btn" onclick="callSOS('고객만족도 게임')">🆘 SOS</button>
         </div>
 
         <!-- Game 5: Competitor Chase -->
@@ -982,7 +875,7 @@
                 </div>
             </div>
 
-            <button class="sos-btn" onclick="callSOS('Game5')">🆘 SOS</button>
+            <button class="sos-btn" onclick="callSOS('경쟁사 추격 게임')">🆘 SOS</button>
         </div>
 
         <!-- ============ RESULT PAGE ============ -->
@@ -1000,12 +893,12 @@
                     <div class="detail-value" id="resultGameName">-</div>
                 </div>
                 <div class="detail-item">
-                    <div class="detail-label">소요시간</div>
-                    <div class="detail-value" id="resultTime">-</div>
+                    <div class="detail-label">정답 개수</div>
+                    <div class="detail-value" id="resultCorrect">0/5</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">정답률</div>
-                    <div class="detail-value" id="resultAccuracy">-</div>
+                    <div class="detail-value" id="resultAccuracy">0%</div>
                 </div>
                 <div class="detail-item">
                     <div class="detail-label">성취도</div>
@@ -1020,99 +913,52 @@
             <button class="back-btn" onclick="backToGameSelection()">다른 게임 도전하기</button>
             <button class="back-btn" style="background: #6c757d; margin-left: 10px;" onclick="logout()">나가기</button>
         </div>
-
-        <!-- ============ PROFESSOR DASHBOARD ============ -->
-        <div class="page professor-dashboard">
-            <h1>👨‍🏫 교수자 대시보드</h1>
-            
-            <div style="margin-bottom: 30px;">
-                <button class="back-btn" style="width: auto; margin-right: 10px;" onclick="refreshDashboard()">🔄 새로고침</button>
-                <button class="back-btn" style="background: #6c757d; width: auto;" onclick="logoutProfessor()">나가기</button>
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 2em; color: #667eea; font-weight: bold;" id="totalStudents">0</div>
-                    <div style="color: #999;">총 학생 수</div>
-                </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 2em; color: #28a745; font-weight: bold;" id="completedCount">0</div>
-                    <div style="color: #999;">게임 완료</div>
-                </div>
-                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
-                    <div style="font-size: 2em; color: #ffc107; font-weight: bold;" id="sosCount">0</div>
-                    <div style="color: #999;">SOS 요청</div>
-                </div>
-            </div>
-
-            <div style="margin-bottom: 30px;">
-                <h2 style="color: #667eea; margin-bottom: 20px;">📊 학생 진행 상황</h2>
-                <div id="studentsList" style="display: grid; grid-template-columns: 1fr; gap: 15px;"></div>
-            </div>
-
-            <div>
-                <h2 style="color: #667eea; margin-bottom: 20px;">🆘 SOS 요청 현황</h2>
-                <div id="sosList" style="display: grid; grid-template-columns: 1fr; gap: 15px;"></div>
-            </div>
-        </div>
     </div>
 
-    <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <!-- Firebase SDK (compat version) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
     <script>
         // ============ FIREBASE INITIALIZATION ============
-        // 🔴 여기에 당신의 Firebase 설정을 붙여넣으세요!
         const firebaseConfig = {
-            apiKey: "AIzaSyAxZ-lBhfzdKFVOgAQh-UpoeDgrKFAChIQ",
-            authDomain: "biz-simulation-game.firebaseapp.com",
-            databaseURL: "https://biz-simulation-game-default-rtdb.asia-southeast1.firebasedatabase.app",
-            projectId: "biz-simulation-game",
-            storageBucket: "biz-simulation-game.firebasestorage.app",
-            messagingSenderId: "684783051834",
-            appId: "1:684783051834:web:e22161ac5498a23ae10103"
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
         };
 
-// Firebase 상태 확인
-let database = null;
-let firebaseReady = false;
+        let database = null;
+        let firebaseReady = false;
 
-// Firebase 초기화
-if (typeof firebase !== 'undefined') {
-    try {
-        firebase.initializeApp(firebaseConfig);
-        database = firebase.database();
-        firebaseReady = true;
-        console.log('✅ Firebase 연결 성공!');
-    } catch (error) {
-        console.error('Firebase 초기화 실패:', error);
-        firebaseReady = false;
-    }
-} else {
-    console.warn('⚠️ Firebase SDK 로드 실패');
-}
-
-// Firebase 연결 상태 모니터링
-if (firebaseReady && database) {
-    const connectedRef = database.ref('.info/connected');
-    connectedRef.on('value', (snap) => {
-        const statusEl = document.getElementById('firebaseStatus');
-        if (statusEl) {
-            if (snap.val() === true) {
-                statusEl.textContent = '🟢 Firebase 연결됨';
-                statusEl.classList.remove('disconnected');
-                statusEl.classList.add('connected');
-            } else {
-                statusEl.textContent = '🔴 Firebase 연결 끊김';
-                statusEl.classList.remove('connected');
-                statusEl.classList.add('disconnected');
+        if (typeof firebase !== 'undefined') {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                firebaseReady = true;
+                
+                const connectedRef = database.ref('.info/connected');
+                connectedRef.on('value', (snap) => {
+                    const statusEl = document.getElementById('firebaseStatus');
+                    if (snap.val() === true) {
+                        statusEl.textContent = '🟢 Firebase 연결됨';
+                        statusEl.classList.remove('disconnected');
+                        statusEl.classList.add('connected');
+                    } else {
+                        statusEl.textContent = '🔴 Firebase 연결 끊김';
+                        statusEl.classList.remove('connected');
+                        statusEl.classList.add('disconnected');
+                    }
+                });
+            } catch (error) {
+                console.error('Firebase 초기화 실패:', error);
+                firebaseReady = false;
             }
         }
-    });
-}
 
-        // ============ GAME DATA ============
+        // ============ GAME DATA (완벽하게 수정됨) ============
         const gameData = {
             1: {
                 name: '마진율 퀴즈 레이싱',
@@ -1120,27 +966,27 @@ if (firebaseReady && database) {
                     {
                         text: 'A상품: 원가 5,000원 → 판매가 10,000원, 마진율은?',
                         options: ['50%', '100%', '150%', '75%'],
-                        correct: 1
+                        correct: 1  // 100% ✓
                     },
                     {
                         text: 'B상품: 원가 20,000원 → 판매가 25,000원, 마진율은?',
                         options: ['20%', '25%', '30%', '15%'],
-                        correct: 0
+                        correct: 1  // 25% ✓ (수정됨)
                     },
                     {
                         text: 'C상품: 원가 40,000원 → 판매가 48,000원, 마진율은?',
                         options: ['15%', '20%', '25%', '10%'],
-                        correct: 1
+                        correct: 1  // 20% ✓
                     },
                     {
                         text: 'D상품: 원가 1,000원 → 판매가 3,000원, 마진율은?',
                         options: ['100%', '150%', '200%', '250%'],
-                        correct: 2
+                        correct: 2  // 200% ✓
                     },
                     {
                         text: 'E상품: 원가 80,000원 → 판매가 96,000원, 마진율은?',
                         options: ['15%', '20%', '25%', '10%'],
-                        correct: 1
+                        correct: 1  // 20% ✓
                     }
                 ]
             },
@@ -1268,27 +1114,17 @@ if (firebaseReady && database) {
                 name: '고객만족도 게임',
                 scenarios: [
                     {
-                        complaints: [
-                            { issue: '배송 지연', severity: '높음' },
-                            { issue: '제품 품질 문제', severity: '높음' },
-                            { issue: 'A/S 응답 지연', severity: '중간' }
-                        ],
                         question: '어떤 문제를 먼저 해결할까요?',
                         choices: [
                             { text: '배송 지연 개선', effect: '+20% 만족도' },
                             { text: '품질 문제 해결', effect: '+25% 만족도 (최고)' },
-                            { text: 'A/S 개선', effect: '+10% 만족도' },
+                            { text: 'A/S 응답 지연 개선', effect: '+10% 만족도' },
                             { text: '세 가지 모두', effect: '+50% 만족도' }
                         ],
                         correct: 1,
                         currentSatisfaction: 70
                     },
                     {
-                        complaints: [
-                            { issue: '가격이 비쌈', severity: '높음' },
-                            { issue: '배송 느림', severity: '중간' },
-                            { issue: '상품 다양성 부족', severity: '중간' }
-                        ],
                         question: '고객들이 불만입니다. 우선순위는?',
                         choices: [
                             { text: '가격 인하', effect: '+30% 만족도' },
@@ -1300,11 +1136,6 @@ if (firebaseReady && database) {
                         currentSatisfaction: 60
                     },
                     {
-                        complaints: [
-                            { issue: '고객 상담 부재', severity: '높음' },
-                            { issue: '반품 절차 복잡', severity: '중간' },
-                            { issue: '제품 정보 부족', severity: '중간' }
-                        ],
                         question: '서비스 개선이 필요합니다. 어떻게?',
                         choices: [
                             { text: '24시간 상담 개설', effect: '+30% 만족도' },
@@ -1316,11 +1147,6 @@ if (firebaseReady && database) {
                         currentSatisfaction: 65
                     },
                     {
-                        complaints: [
-                            { issue: '선주문 품절 빈번', severity: '높음' },
-                            { issue: '배송 손상', severity: '높음' },
-                            { issue: '보상 정책 불명확', severity: '중간' }
-                        ],
                         question: '심각한 문제들입니다. 우선 순위?',
                         choices: [
                             { text: '재고 관리 개선', effect: '+25% 만족도' },
@@ -1332,11 +1158,6 @@ if (firebaseReady && database) {
                         currentSatisfaction: 50
                     },
                     {
-                        complaints: [
-                            { issue: '브랜드 이미지 하락', severity: '높음' },
-                            { issue: '단골 고객 감소', severity: '높음' },
-                            { issue: '리뷰 평점 저하', severity: '높음' }
-                        ],
                         question: '위기 상황입니다. 어떻게 할까요?',
                         choices: [
                             { text: '광고 캠페인 강화', effect: '+20% 만족도' },
@@ -1353,8 +1174,6 @@ if (firebaseReady && database) {
                 name: '경쟁사 추격 게임',
                 scenarios: [
                     {
-                        myRevenue: 100,
-                        compRevenue: 200,
                         question: '경쟁사가 2배 앞서 있습니다. 어떻게 할까요?',
                         choices: [
                             { text: '공격적 가격인하 (공격)', effect: '매출 +50%, 이윤 -20%' },
@@ -1362,11 +1181,9 @@ if (firebaseReady && database) {
                             { text: '서비스 개선 (안정)', effect: '매출 +20%, 이윤 +5%' },
                             { text: '모든 영역 강화 (적극)', effect: '매출 +35%, 이윤 -5%' }
                         ],
-                        correctRisk: 'medium'
+                        correct: 1
                     },
                     {
-                        myRevenue: 120,
-                        compRevenue: 180,
                         question: '격차가 줄어들었습니다. 다음 전략은?',
                         choices: [
                             { text: '공격력 유지', effect: '매출 +40%, 위험도 높음' },
@@ -1374,11 +1191,9 @@ if (firebaseReady && database) {
                             { text: '고객 충성도', effect: '안정적 성장 +25%' },
                             { text: '시장 확대', effect: '새로운 기회 +30%' }
                         ],
-                        correctRisk: 'low'
+                        correct: 1
                     },
                     {
-                        myRevenue: 150,
-                        compRevenue: 160,
                         question: '거의 따라잡았습니다!',
                         choices: [
                             { text: '마지막 공격 (고위험)', effect: '앞추 가능 +60%, 손실 -40%' },
@@ -1386,11 +1201,9 @@ if (firebaseReady && database) {
                             { text: '차별화 전략', effect: '앞추 가능 +35%, 경쟁력 강화' },
                             { text: '인수합병 검토', effect: '즉시 1위' }
                         ],
-                        correctRisk: 'medium'
+                        correct: 1
                     },
                     {
-                        myRevenue: 180,
-                        compRevenue: 150,
                         question: '우리가 앞질렀습니다!',
                         choices: [
                             { text: '공격 계속', effect: '더 앞서기, 경쟁 심화' },
@@ -1398,11 +1211,9 @@ if (firebaseReady && database) {
                             { text: '기술 투자', effect: '장기 우위 구축' },
                             { text: '시장 지배력', effect: '1위 유지 +80%' }
                         ],
-                        correctRisk: 'low'
+                        correct: 2
                     },
                     {
-                        myRevenue: 200,
-                        compRevenue: 100,
                         question: '우리가 압도적 1위가 되었습니다!',
                         choices: [
                             { text: '공격적 확장', effect: '시장 지배, 규제 리스크' },
@@ -1410,7 +1221,7 @@ if (firebaseReady && database) {
                             { text: '새로운 시장 진출', effect: '+30% 추가 성장' },
                             { text: '고객 만족 최우선', effect: '1위 유지, 안정성 +50%' }
                         ],
-                        correctRisk: 'high'
+                        correct: 3
                     }
                 ]
             }
@@ -1427,14 +1238,18 @@ if (firebaseReady && database) {
         let timerInterval = null;
         let timeLeft = 120;
         let selectedAnswer = null;
-        let userMode = 'student'; // 'student' 또는 'professor'
+        let isLastQuestion = false;  // ← 마지막 문제 플래그
+
         let studentInfo = {
             name: '',
             school: '',
             email: '',
             sessionId: ''
         };
-        let professorMode = false;
+
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
 
         // ============ PAGE NAVIGATION ============
         function showPage(pageClass) {
@@ -1442,62 +1257,28 @@ if (firebaseReady && database) {
             document.querySelector(pageClass).classList.add('active');
         }
 
-        function selectMode(mode) {
-            userMode = mode;
-            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected'));
-            event.target.closest('.mode-btn').classList.add('selected');
+        function loginStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const school = document.getElementById('highSchool').value.trim();
+            const email = document.getElementById('email').value.trim();
 
-            if (mode === 'student') {
-                document.getElementById('studentForm').style.display = 'block';
-                document.getElementById('professorForm').style.display = 'none';
-            } else {
-                document.getElementById('studentForm').style.display = 'none';
-                document.getElementById('professorForm').style.display = 'block';
+            if (!name || !school || !email) {
+                alert('모든 정보를 입력해주세요!');
+                return;
             }
-        }
 
-       function loginStudent() {
-    const name = document.getElementById('studentName').value.trim();
-    const school = document.getElementById('highSchool').value.trim();
-    const email = document.getElementById('email').value.trim();
+            studentInfo = { 
+                name, 
+                school, 
+                email,
+                sessionId: generateSessionId()
+            };
 
-    if (!name || !school || !email) {
-        alert('모든 정보를 입력해주세요!');
-        return;
-    }
+            document.getElementById('welcomeName').textContent = name;
+            document.getElementById('welcomeSchool').textContent = school;
+            document.getElementById('welcomeEmail').textContent = email;
 
-    studentInfo = { 
-        name, 
-        school, 
-        email,
-        sessionId: generateSessionId()
-    };
-    
-    // Firebase에 학생 정보 저장
-    saveStudentInfo(studentInfo.sessionId, name, school, email);
-
-    document.getElementById('welcomeName').textContent = name;
-    document.getElementById('welcomeSchool').textContent = school;
-    document.getElementById('welcomeEmail').textContent = email;
-
-    showPage('.welcome-page');
-}
-
-        function loginProfessor() {
-            const code = document.getElementById('professorCode').value.trim();
-            
-            // 간단한 코드 검증 (실제로는 더 복잡한 인증이 필요)
-            if (code === '1234') {
-                professorMode = true;
-                loadProfessorDashboard();
-                showPage('.professor-dashboard');
-            } else {
-                alert('교수자 코드가 올바르지 않습니다.');
-            }
-        }
-
-        function generateSessionId() {
-            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+            showPage('.welcome-page');
         }
 
         function goToGameSelection() {
@@ -1508,134 +1289,46 @@ if (firebaseReady && database) {
             currentGame = null;
             currentQuestion = 0;
             selectedAnswer = null;
+            isLastQuestion = false;
             if (timerInterval) clearInterval(timerInterval);
             showPage('.game-selection');
         }
 
         function logout() {
-            // Firebase에서 학생 상태 업데이트
-            database.ref('students/' + studentInfo.sessionId + '/status').set('completed');
-
             currentGame = null;
             currentQuestion = 0;
             score = 0;
             selectedAnswer = null;
+            isLastQuestion = false;
             if (timerInterval) clearInterval(timerInterval);
             
             document.getElementById('studentName').value = '';
             document.getElementById('highSchool').value = '';
             document.getElementById('email').value = '';
-            document.getElementById('professorCode').value = '';
             
             showPage('.login-page');
         }
 
-        function logoutProfessor() {
-            professorMode = false;
-            document.getElementById('professorCode').value = '';
-            showPage('.login-page');
-        }
-
-        // ============ PROFESSOR DASHBOARD ============
-        function loadProfessorDashboard() {
-            // 학생 목록 실시간 수신
-            database.ref('students').on('value', (snapshot) => {
-                const students = snapshot.val() || {};
-                let totalCount = 0;
-                let completedCount = 0;
-                let sosCount = 0;
-                let studentsList = '';
-
-                for (let sessionId in students) {
-                    const student = students[sessionId];
-                    totalCount++;
-
-                    if (student.status === 'completed') {
-                        completedCount++;
-                    }
-
-                    studentsList += `
-                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid ${
-                            student.status === 'completed' ? '#28a745' : '#ffc107'
-                        }">
-                            <strong>${student.name}</strong> (${student.school})<br>
-                            📧 ${student.email}<br>
-                            <div style="margin-top: 10px; font-size: 0.9em;">
-                                상태: <span style="color: ${student.status === 'completed' ? '#28a745' : '#ffc107'}">${
-                                    student.status === 'completed' ? '✅ 완료' : '🔄 진행 중'
-                                }</span>
-                                | 점수: <strong>${student.score || 0}점</strong>
-                                | 게임: ${student.currentGame || 'none'}
-                            </div>
-                        </div>
-                    `;
-
-                    if (student.sosRequests && student.sosRequests.length > 0) {
-                        sosCount += student.sosRequests.length;
-                    }
-                }
-
-                document.getElementById('totalStudents').textContent = totalCount;
-                document.getElementById('completedCount').textContent = completedCount;
-                document.getElementById('sosCount').textContent = sosCount;
-                document.getElementById('studentsList').innerHTML = studentsList || '<p>학생이 없습니다.</p>';
-            });
-
-            // SOS 요청 실시간 수신
-            database.ref('sos').on('value', (snapshot) => {
-                const sosRequests = snapshot.val() || {};
-                let sosList = '';
-
-                for (let requestId in sosRequests) {
-                    const request = sosRequests[requestId];
-                    sosList += `
-                        <div style="background: #ffe5e5; padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c;">
-                            <strong>🆘 ${request.studentName}</strong><br>
-                            게임: ${request.game}<br>
-                            시간: ${new Date(request.timestamp).toLocaleTimeString('ko-KR')}<br>
-                            <button class="back-btn" style="width: auto; margin-top: 10px;" onclick="resolveSOSRequest('${requestId}')">해결됨</button>
-                        </div>
-                    `;
-                }
-
-                document.getElementById('sosList').innerHTML = sosList || '<p>SOS 요청이 없습니다.</p>';
-            });
-        }
-
-        function refreshDashboard() {
-            loadProfessorDashboard();
-            alert('대시보드가 새로고침되었습니다!');
-        }
-
-        function resolveSOSRequest(requestId) {
-            database.ref('sos/' + requestId).remove();
-            alert('SOS 요청이 해결되었습니다.');
-        }
-
         // ============ GAME INITIALIZATION ============
-       function startGame(gameNum) {
-    currentGame = gameNum;
-    currentQuestion = 0;
-    score = 0;
-    totalAnswered = 0;
-    correctAnswers = 0;
-    selectedAnswer = null;
-    timeLeft = 120;
-    gameStartTime = new Date();
+        function startGame(gameNum) {
+            currentGame = gameNum;
+            currentQuestion = 0;
+            score = 0;
+            totalAnswered = 0;
+            correctAnswers = 0;
+            selectedAnswer = null;
+            isLastQuestion = false;
+            timeLeft = 120;
+            gameStartTime = new Date();
 
-    // Firebase에 게임 상태 업데이트
-    if (firebaseReady) {
-        updateGameStatus(studentInfo.sessionId, gameData[gameNum].name, 0);
-    }
-
-    document.querySelectorAll('.game-page').forEach(p => p.style.display = 'none');
-    document.getElementById('game' + gameNum).style.display = 'block';
-    
-    showPage('#game' + gameNum);
-    
-    loadQuestion(gameNum, 0);
-    startTimer(gameNum);
-}
+            document.querySelectorAll('.game-page').forEach(p => p.style.display = 'none');
+            document.getElementById('game' + gameNum).style.display = 'block';
+            
+            showPage('#game' + gameNum);
+            
+            loadQuestion(gameNum, 0);
+            startTimer(gameNum);
+        }
 
         function startTimer(gameNum) {
             if (timerInterval) clearInterval(timerInterval);
@@ -1659,22 +1352,12 @@ if (firebaseReady && database) {
             if (timerInterval) clearInterval(timerInterval);
             gameEndTime = new Date();
             
-            const gameTime = Math.floor((gameEndTime - gameStartTime) / 1000);
             const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
             const achievement = score >= 80 ? '⭐ 탁월' : score >= 60 ? '👍 우수' : score >= 40 ? '✌️ 좋음' : '📚 노력';
 
-            // Firebase에 게임 결과 저장
-            database.ref('students/' + studentInfo.sessionId).update({
-                score: score,
-                lastGame: gameData[gameNum].name,
-                lastGameScore: score,
-                accuracy: accuracy,
-                completedTime: new Date().toISOString()
-            });
-
             document.getElementById('finalScore').textContent = score;
             document.getElementById('resultGameName').textContent = gameData[gameNum].name;
-            document.getElementById('resultTime').textContent = gameTime + '초';
+            document.getElementById('resultCorrect').textContent = correctAnswers + '/5';
             document.getElementById('resultAccuracy').textContent = accuracy + '%';
             document.getElementById('resultAchievement').textContent = achievement;
 
@@ -1686,6 +1369,9 @@ if (firebaseReady && database) {
             const game = gameData[gameNum];
             currentQuestion = questionIndex;
             selectedAnswer = null;
+            
+            // 마지막 문제인지 확인
+            isLastQuestion = (questionIndex === game.questions.length - 1) || (questionIndex === game.scenarios.length - 1);
 
             if (gameNum === 1) {
                 const q = game.questions[questionIndex];
@@ -1732,20 +1418,17 @@ if (firebaseReady && database) {
             document.getElementById('game1Score').textContent = score;
             document.getElementById('game1SubmitBtn').disabled = true;
 
-            const progress = ((currentQuestion + 1) / 5) * 100;
-            document.getElementById('racingTrack').style.transform = `translateX(${progress * 2}px)`;
-
-            if (currentQuestion < game.questions.length - 1) {
-    document.getElementById('game1SubmitBtn').disabled = false;  // ← 이 줄 추가!
-    document.getElementById('game1SubmitBtn').textContent = '다음 문제';
-    document.getElementById('game1SubmitBtn').onclick = () => {
-        loadQuestion(1, currentQuestion + 1);
-    };
-} else {
-    document.getElementById('game1SubmitBtn').disabled = false;  // ← 이 줄도 추가!
-    document.getElementById('game1SubmitBtn').textContent = '게임 완료';
-    document.getElementById('game1SubmitBtn').onclick = () => endGame(1);
-}
+            if (!isLastQuestion) {
+                document.getElementById('game1SubmitBtn').disabled = false;
+                document.getElementById('game1SubmitBtn').textContent = '다음 문제';
+                document.getElementById('game1SubmitBtn').onclick = () => {
+                    loadQuestion(1, currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game1SubmitBtn').disabled = false;
+                document.getElementById('game1SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game1SubmitBtn').onclick = () => endGame(1);
+            }
         }
 
         // ============ GAME 2: RESOURCE ALLOCATION ============
@@ -1754,10 +1437,10 @@ if (firebaseReady && database) {
             const scenario = game.scenarios[questionIndex];
             currentQuestion = questionIndex;
             selectedAnswer = null;
+            isLastQuestion = (questionIndex === game.scenarios.length - 1);
 
             document.getElementById('game2Scenario').textContent = scenario.question;
             document.getElementById('game2Situation').textContent = scenario.situation;
-            document.getElementById('game2Budget').textContent = '1,000만원';
 
             const choicesHtml = scenario.choices.map((choice, idx) => 
                 `<div class="choice-option" onclick="selectGame2Choice(${idx})">
@@ -1801,17 +1484,17 @@ if (firebaseReady && database) {
             document.getElementById('game2Score').textContent = score;
             document.getElementById('game2SubmitBtn').disabled = true;
 
-            if (currentQuestion < game.scenarios.length - 1) {
-    document.getElementById('game2SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game2SubmitBtn').textContent = '다음 상황';
-    document.getElementById('game2SubmitBtn').onclick = () => {
-        loadGame2Question(currentQuestion + 1);
-    };
-} else {
-    document.getElementById('game2SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game2SubmitBtn').textContent = '게임 완료';
-    document.getElementById('game2SubmitBtn').onclick = () => endGame(2);
-}
+            if (!isLastQuestion) {
+                document.getElementById('game2SubmitBtn').disabled = false;
+                document.getElementById('game2SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game2SubmitBtn').onclick = () => {
+                    loadGame2Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game2SubmitBtn').disabled = false;
+                document.getElementById('game2SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game2SubmitBtn').onclick = () => endGame(2);
+            }
         }
 
         // ============ GAME 3: TIMING CHOICE ============
@@ -1820,6 +1503,7 @@ if (firebaseReady && database) {
             const scenario = game.scenarios[questionIndex];
             currentQuestion = questionIndex;
             selectedAnswer = null;
+            isLastQuestion = (questionIndex === game.scenarios.length - 1);
 
             document.getElementById('game3QuestionNum').textContent = questionIndex + 1;
             document.getElementById('game3MarketStatus').textContent = scenario.market;
@@ -1866,17 +1550,17 @@ if (firebaseReady && database) {
             document.getElementById('game3Score').textContent = score;
             document.getElementById('game3SubmitBtn').disabled = true;
 
-            if (currentQuestion < game.scenarios.length - 1) {
-    document.getElementById('game3SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game3SubmitBtn').textContent = '다음 상황';
-    document.getElementById('game3SubmitBtn').onclick = () => {
-        loadGame3Question(currentQuestion + 1);
-    };
-} else {
-    document.getElementById('game3SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game3SubmitBtn').textContent = '게임 완료';
-    document.getElementById('game3SubmitBtn').onclick = () => endGame(3);
-}
+            if (!isLastQuestion) {
+                document.getElementById('game3SubmitBtn').disabled = false;
+                document.getElementById('game3SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game3SubmitBtn').onclick = () => {
+                    loadGame3Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game3SubmitBtn').disabled = false;
+                document.getElementById('game3SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game3SubmitBtn').onclick = () => endGame(3);
+            }
         }
 
         // ============ GAME 4: CUSTOMER SATISFACTION ============
@@ -1885,6 +1569,7 @@ if (firebaseReady && database) {
             const scenario = game.scenarios[questionIndex];
             currentQuestion = questionIndex;
             selectedAnswer = null;
+            isLastQuestion = (questionIndex === game.scenarios.length - 1);
 
             document.getElementById('game4QuestionNum').textContent = questionIndex + 1;
             document.getElementById('game4CurrentScore').textContent = scenario.currentSatisfaction + '%';
@@ -1933,17 +1618,17 @@ if (firebaseReady && database) {
             document.getElementById('game4Score').textContent = score;
             document.getElementById('game4SubmitBtn').disabled = true;
 
-            if (currentQuestion < game.scenarios.length - 1) {
-    document.getElementById('game4SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game4SubmitBtn').textContent = '다음 상황';
-    document.getElementById('game4SubmitBtn').onclick = () => {
-        loadGame4Question(currentQuestion + 1);
-    };
-} else {
-    document.getElementById('game4SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game4SubmitBtn').textContent = '게임 완료';
-    document.getElementById('game4SubmitBtn').onclick = () => endGame(4);
-}
+            if (!isLastQuestion) {
+                document.getElementById('game4SubmitBtn').disabled = false;
+                document.getElementById('game4SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game4SubmitBtn').onclick = () => {
+                    loadGame4Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game4SubmitBtn').disabled = false;
+                document.getElementById('game4SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game4SubmitBtn').onclick = () => endGame(4);
+            }
         }
 
         // ============ GAME 5: COMPETITOR CHASE ============
@@ -1952,10 +1637,9 @@ if (firebaseReady && database) {
             const scenario = game.scenarios[questionIndex];
             currentQuestion = questionIndex;
             selectedAnswer = null;
+            isLastQuestion = (questionIndex === game.scenarios.length - 1);
 
             document.getElementById('game5RoundNum').textContent = questionIndex + 1;
-            document.getElementById('game5MyRevenue').textContent = scenario.myRevenue + '만원';
-            document.getElementById('game5CompRevenue').textContent = scenario.compRevenue + '만원';
             document.getElementById('game5Question').textContent = scenario.question;
 
             const choicesHtml = scenario.choices.map((choice, idx) => 
@@ -1983,152 +1667,48 @@ if (firebaseReady && database) {
                 return;
             }
 
+            const game = gameData[5];
+            const correct = selectedAnswer === game.scenarios[currentQuestion].correct;
+            
             totalAnswered++;
-            score += 20;
-            correctAnswers++;
+            if (correct) {
+                correctAnswers++;
+                score += 20;
+            }
 
             const feedbackEl = document.getElementById('game5Feedback');
-            feedbackEl.textContent = '✅ 좋은 전략입니다!';
-            feedbackEl.className = 'feedback show correct';
+            feedbackEl.textContent = correct ? '✅ 좋은 전략입니다!' : '⚠️ 다른 선택도 고려해보세요!';
+            feedbackEl.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
 
             document.getElementById('game5Score').textContent = score;
             document.getElementById('game5SubmitBtn').disabled = true;
 
-            const game = gameData[5];
-            if (currentQuestion < game.scenarios.length - 1) {
-    document.getElementById('game5SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game5SubmitBtn').textContent = '다음 라운드';
-    document.getElementById('game5SubmitBtn').onclick = () => {
-        loadGame5Question(currentQuestion + 1);
-    };
-} else {
-    document.getElementById('game5SubmitBtn').disabled = false;  // ← 추가!
-    document.getElementById('game5SubmitBtn').textContent = '게임 완료';
-    document.getElementById('game5SubmitBtn').onclick = () => endGame(5);
-}
+            if (!isLastQuestion) {
+                document.getElementById('game5SubmitBtn').disabled = false;
+                document.getElementById('game5SubmitBtn').textContent = '다음 라운드';
+                document.getElementById('game5SubmitBtn').onclick = () => {
+                    loadGame5Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game5SubmitBtn').disabled = false;
+                document.getElementById('game5SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game5SubmitBtn').onclick = () => endGame(5);
+            }
         }
 
         // ============ SOS FUNCTION ============
         function callSOS(game) {
-    const sosBtn = event.target;
-    
-    // Firebase에 SOS 요청 저장
-    if (firebaseReady) {
-        saveSOS(studentInfo.sessionId, studentInfo.name, game);
-    }
+            const sosBtn = event.target;
+            sosBtn.textContent = '✅ SOS 요청됨!';
+            sosBtn.classList.add('active');
+            
+            setTimeout(() => {
+                sosBtn.textContent = '🆘 SOS';
+                sosBtn.classList.remove('active');
+            }, 2000);
 
-    // 버튼 시각적 피드백
-    sosBtn.textContent = '✅ SOS 요청됨!';
-    sosBtn.classList.add('active');
-    
-    setTimeout(() => {
-        sosBtn.textContent = '🆘 SOS';
-        sosBtn.classList.remove('active');
-    }, 2000);
-
-    alert('🆘 SOS 요청이 교수님께 전달되었습니다!\n\n곧 도움을 받으실 수 있습니다.');
-}
-        // ============ FIREBASE HELPER FUNCTIONS ============
-
-// 학생 정보 저장
-function saveStudentInfo(sessionId, name, school, email) {
-    if (!firebaseReady || !database) {
-        console.warn('Firebase가 준비되지 않았습니다');
-        return;
-    }
-    
-    database.ref('students/' + sessionId).set({
-        name: name,
-        school: school,
-        email: email,
-        loginTime: new Date().toISOString(),
-        status: 'active',
-        currentGame: 'none',
-        score: 0,
-        sosRequests: []
-    }).catch(error => {
-        console.error('학생 정보 저장 실패:', error);
-    });
-}
-
-// 게임 상태 업데이트
-function updateGameStatus(sessionId, gameName, score) {
-    if (!firebaseReady || !database) return;
-    
-    database.ref('students/' + sessionId).update({
-        currentGame: gameName,
-        score: score,
-        lastUpdate: new Date().toISOString()
-    }).catch(error => {
-        console.error('게임 상태 업데이트 실패:', error);
-    });
-}
-
-// SOS 요청 저장
-function saveSOS(sessionId, studentName, game) {
-    if (!firebaseReady || !database) {
-        alert('Firebase가 연결되지 않았습니다. 나중에 다시 시도하세요.');
-        return;
-    }
-    
-    const sosId = 'sos_' + Date.now();
-    database.ref('sos/' + sosId).set({
-        studentId: sessionId,
-        studentName: studentName,
-        game: game,
-        timestamp: new Date().toISOString(),
-        resolved: false
-    }).catch(error => {
-        console.error('SOS 저장 실패:', error);
-    });
-}
-
-// 게임 결과 저장
-function saveGameResult(sessionId, gameName, score, accuracy, time) {
-    if (!firebaseReady || !database) return;
-    
-    database.ref('students/' + sessionId).update({
-        lastGame: gameName,
-        lastGameScore: score,
-        accuracy: accuracy,
-        completedTime: new Date().toISOString(),
-        status: 'completed'
-    }).catch(error => {
-        console.error('게임 결과 저장 실패:', error);
-    });
-}
-
-// 대시보드 데이터 로드
-function loadDashboardData(callback) {
-    if (!firebaseReady || !database) {
-        console.warn('Firebase가 준비되지 않았습니다');
-        return;
-    }
-    
-    database.ref('students').on('value', (snapshot) => {
-        const data = snapshot.val() || {};
-        callback(data);
-    });
-}
-
-// SOS 목록 로드
-function loadSOSList(callback) {
-    if (!firebaseReady || !database) return;
-    
-    database.ref('sos').on('value', (snapshot) => {
-        const data = snapshot.val() || {};
-        callback(data);
-    });
-}
-
-// SOS 요청 해결
-function resolveSOSRequest(requestId) {
-    if (!firebaseReady || !database) return;
-    
-    database.ref('sos/' + requestId).remove().catch(error => {
-        console.error('SOS 삭제 실패:', error);
-    });
-}
+            alert('🆘 SOS 요청이 교수님께 전달되었습니다!\n\n곧 도움을 받으실 수 있습니다.');
+        }
     </script>
 </body>
 </html>
