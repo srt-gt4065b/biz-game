@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>우송대학교 AI경영학과 경영게임 플랫폼</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ============ LOGIN PAGE ============ */
+        .login-page h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .login-page .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .mode-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .mode-btn {
+            padding: 20px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .mode-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .mode-btn.selected {
+            border-color: #667eea;
+            background: #667eea;
+            color: white;
+        }
+
+        .mode-btn .emoji {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .mode-btn h3 {
+            margin-bottom: 5px;
+        }
+
+        /* ============ WELCOME PAGE ============ */
+        .welcome-page {
+            text-align: center;
+        }
+
+        .welcome-message {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-weight: bold;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .student-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #667eea;
+        }
+
+        .student-info p {
+            margin: 8px 0;
+            color: #555;
+            font-size: 1.05em;
+        }
+
+        .game-intro {
+            background: #fff3cd;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border-left: 5px solid #ffc107;
+        }
+
+        .game-intro h2 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .game-intro p {
+            color: #856404;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .start-btn {
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* ============ GAME SELECTION PAGE ============ */
+        .game-selection h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 40px;
+        }
+
+        .games-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .game-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+            text-align: center;
+        }
+
+        .game-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .game-card .emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .game-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .game-card p {
+            color: #666;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        /* ============ GAME PAGE ============ */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .game-title {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 30px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #999;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .timer {
+            font-size: 1.5em;
+            color: #e74c3c;
+        }
+
+        .game-content {
+            min-height: 400px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sos-btn {
+            padding: 10px 20px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 1em;
+            z-index: 1000;
+        }
+
+        .sos-btn:hover {
+            background: #c0392b;
+            transform: scale(1.1);
+        }
+
+        .sos-btn.active {
+            background: #28a745;
+            animation: pulse 0.5s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        /* ============ GAME SPECIFIC STYLES ============ */
+        .question-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 5px solid #667eea;
+        }
+
+        .question-number {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            padding: 12px 20px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95em;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option-btn.correct {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .option-btn.incorrect {
+            background: #e74c3c;
+            color: white;
+            border-color: #e74c3c;
+        }
+
+        .choice-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .choice-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .choice-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .choice-option {
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .choice-option:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .choice-option.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .choice-risk {
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+
+        .submit-btn, .next-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin-top: 15px;
+        }
+
+        .submit-btn:hover, .next-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+        }
+
+        .feedback.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* ============ RESULT PAGE ============ */
+        .result-page {
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 30px;
+            font-weight: bold;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .final-score {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            animation: scorePopup 0.5s ease-out;
+        }
+
+        @keyframes scorePopup {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .score-label {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .result-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #667eea;
+        }
+
+        .detail-label {
+            color: #999;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+
+        .detail-value {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            padding: 14px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .racing-track {
+            display: flex;
+            gap: 10px;
+            justify-content: space-around;
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .car {
+            font-size: 3em;
+            transition: all 0.3s;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: #ddd;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .firebase-status {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            font-size: 0.9em;
+            z-index: 999;
+        }
+
+        .firebase-status.connected {
+            border-left: 4px solid #28a745;
+            color: #155724;
+        }
+
+        .firebase-status.disconnected {
+            border-left: 4px solid #e74c3c;
+            color: #721c24;
+        }
+
+        @media (max-width: 768px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+            }
+
+            .game-stats {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .result-details {
+                grid-template-columns: 1fr;
+            }
+
+            .sos-btn {
+                padding: 8px 16px;
+                font-size: 0.9em;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .mode-selector {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Firebase Status Indicator -->
+    <div class="firebase-status disconnected" id="firebaseStatus">
+        🔴 Firebase 연결 중...
+    </div>
+
+    <div class="container">
+        <!-- ============ MODE SELECTION PAGE ============ -->
+        <div class="page login-page active">
+            <h1>🎮 경영게임 플랫폼</h1>
+            <p class="subtitle">우송대학교 AI경영학과 모의 경영 시뮬레이션</p>
+            
+            <div class="mode-selector">
+                <div class="mode-btn selected" onclick="selectMode('student')">
+                    <div class="emoji">👨‍🎓</div>
+                    <h3>학생 모드</h3>
+                    <p>게임에 참여하기</p>
+                </div>
+                <div class="mode-btn" onclick="selectMode('professor')">
+                    <div class="emoji">👨‍🏫</div>
+                    <h3>교수자 모드</h3>
+                    <p>학생 상황 모니터링</p>
+                </div>
+            </div>
+
+            <!-- Student Login Form -->
+            <div id="studentForm">
+                <div class="form-group">
+                    <label for="studentName">👤 성명</label>
+                    <input type="text" id="studentName" placeholder="예: 김철수">
+                </div>
+
+                <div class="form-group">
+                    <label for="highSchool">🏫 출신고등학교</label>
+                    <input type="text" id="highSchool" placeholder="예: OO 고등학교">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">📧 이메일</label>
+                    <input type="email" id="email" placeholder="예: student@example.com">
+                </div>
+
+                <button class="login-btn" onclick="loginStudent()">게임 시작하기</button>
+            </div>
+
+            <!-- Professor Login Form -->
+            <div id="professorForm" style="display: none;">
+                <div class="form-group">
+                    <label for="professorCode">🔐 교수자 코드</label>
+                    <input type="password" id="professorCode" placeholder="교수자 코드를 입력하세요">
+                </div>
+
+                <button class="login-btn" onclick="loginProfessor()">대시보드 접속</button>
+            </div>
+        </div>
+
+        <!-- ============ WELCOME PAGE ============ -->
+        <div class="page welcome-page">
+            <div class="welcome-message">환영합니다! 🎉</div>
+            
+            <div class="student-info">
+                <p><strong id="welcomeName"></strong>님</p>
+                <p>출신학교: <strong id="welcomeSchool"></strong></p>
+                <p>이메일: <strong id="welcomeEmail"></strong></p>
+            </div>
+
+            <div class="game-intro">
+                <h2>📋 오늘의 미션</h2>
+                <p>✅ 5가지 경영 게임에 도전하세요!</p>
+                <p>✅ 각 게임마다 점수를 획득하세요!</p>
+                <p>✅ 시간 제한: 각 게임당 약 2분</p>
+                <p>✅ 더 높은 점수를 목표로 도전하세요!</p>
+                <p>💡 게임 중 궁금하면 "SOS" 버튼을 클릭하세요!</p>
+            </div>
+
+            <button class="start-btn" onclick="goToGameSelection()">게임 선택하기</button>
+        </div>
+
+        <!-- ============ GAME SELECTION PAGE ============ -->
+        <div class="page game-selection">
+            <h1>🎮 게임을 선택하세요</h1>
+            <div class="games-grid">
+                <div class="game-card" onclick="startGame(1)">
+                    <div class="emoji">🏎️</div>
+                    <h3>마진율 퀴즈 레이싱</h3>
+                    <p>마진율을 계산해서 가장 빨리 도착하세요!</p>
+                </div>
+
+                <div class="game-card" onclick="startGame(2)">
+                    <div class="emoji">💰</div>
+                    <h3>가상기업 자원배분</h3>
+                    <p>한정된 자금을 현명하게 배분하세요!</p>
+                </div>
+
+                <div class="game-card" onclick="startGame(3)">
+                    <div class="emoji">⏰</div>
+                    <h3>타이밍 경영 선택</h3>
+                    <p>변화하는 상황에 빠르게 대응하세요!</p>
+                </div>
+
+                <div class="game-card" onclick="startGame(4)">
+                    <div class="emoji">😊</div>
+                    <h3>고객만족도 게임</h3>
+                    <p>고객 불만에 우선순위를 정해 대응하세요!</p>
+                </div>
+
+                <div class="game-card" onclick="startGame(5)">
+                    <div class="emoji">🎯</div>
+                    <h3>경쟁사 추격 게임</h3>
+                    <p>경쟁사를 따라잡고 앞질러 보세요!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ GAME PAGES ============ -->
+        <!-- Game 1: Racing Game -->
+        <div class="page game-page" id="game1">
+            <div class="game-header">
+                <div class="game-title">🏎️ 마진율 퀴즈 레이싱</div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">점수</div>
+                        <div class="stat-value" id="game1Score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">타이머</div>
+                        <div class="stat-value timer" id="game1Timer">02:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="racing-track" id="racingTrack">
+                    <div class="car">🏎️</div>
+                </div>
+
+                <div class="question-container">
+                    <div class="question-number">Q<span id="game1QuestionNum">1</span>/5</div>
+                    <div class="question-text" id="game1Question"></div>
+                    <div class="options" id="game1Options"></div>
+                    <button class="submit-btn" onclick="submitGame1Answer()" id="game1SubmitBtn">답변 제출</button>
+                    <div class="feedback" id="game1Feedback"></div>
+                </div>
+            </div>
+
+            <button class="sos-btn" onclick="callSOS('Game1')">🆘 SOS</button>
+        </div>
+
+        <!-- Game 2: Resource Allocation -->
+        <div class="page game-page" id="game2">
+            <div class="game-header">
+                <div class="game-title">💰 가상기업 자원배분</div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">점수</div>
+                        <div class="stat-value" id="game2Score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">타이머</div>
+                        <div class="stat-value timer" id="game2Timer">02:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="choice-container">
+                    <div class="choice-title" id="game2Scenario"></div>
+                    <div style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p>💰 자금: <strong id="game2Budget">1,000만원</strong></p>
+                        <p>📊 상황: <strong id="game2Situation"></strong></p>
+                    </div>
+                </div>
+
+                <div class="choice-container">
+                    <div class="choice-title">투자 전략 선택</div>
+                    <div class="choice-options" id="game2Options"></div>
+                    <button class="submit-btn" onclick="submitGame2Choice()" id="game2SubmitBtn">선택 완료</button>
+                    <div class="feedback" id="game2Feedback"></div>
+                </div>
+            </div>
+
+            <button class="sos-btn" onclick="callSOS('Game2')">🆘 SOS</button>
+        </div>
+
+        <!-- Game 3: Timing Choice -->
+        <div class="page game-page" id="game3">
+            <div class="game-header">
+                <div class="game-title">⏰ 타이밍 경영 선택</div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">점수</div>
+                        <div class="stat-value" id="game3Score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">타이머</div>
+                        <div class="stat-value timer" id="game3Timer">02:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="question-container">
+                    <div class="question-number">Q<span id="game3QuestionNum">1</span>/5</div>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p>📈 시장 상황: <strong id="game3MarketStatus"></strong></p>
+                    </div>
+                    <div class="question-text" id="game3Question"></div>
+                    <div class="choice-options" id="game3Options"></div>
+                    <button class="submit-btn" onclick="submitGame3Choice()" id="game3SubmitBtn">선택 완료</button>
+                    <div class="feedback" id="game3Feedback"></div>
+                </div>
+            </div>
+
+            <button class="sos-btn" onclick="callSOS('Game3')">🆘 SOS</button>
+        </div>
+
+        <!-- Game 4: Customer Satisfaction -->
+        <div class="page game-page" id="game4">
+            <div class="game-header">
+                <div class="game-title">😊 고객만족도 게임</div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">점수</div>
+                        <div class="stat-value" id="game4Score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">타이머</div>
+                        <div class="stat-value timer" id="game4Timer">02:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="question-container">
+                    <div class="question-number">Q<span id="game4QuestionNum">1</span>/5</div>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p>📊 현재 고객만족도: <strong id="game4CurrentScore">85%</strong></p>
+                    </div>
+                    <div class="question-text" id="game4Question"></div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="game4Progress" style="width: 85%;">85%</div>
+                    </div>
+                    <div class="choice-options" id="game4Options"></div>
+                    <button class="submit-btn" onclick="submitGame4Choice()" id="game4SubmitBtn">대응 완료</button>
+                    <div class="feedback" id="game4Feedback"></div>
+                </div>
+            </div>
+
+            <button class="sos-btn" onclick="callSOS('Game4')">🆘 SOS</button>
+        </div>
+
+        <!-- Game 5: Competitor Chase -->
+        <div class="page game-page" id="game5">
+            <div class="game-header">
+                <div class="game-title">🎯 경쟁사 추격 게임</div>
+                <div class="game-stats">
+                    <div class="stat">
+                        <div class="stat-label">점수</div>
+                        <div class="stat-value" id="game5Score">0</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-label">타이머</div>
+                        <div class="stat-value timer" id="game5Timer">02:00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <div class="question-container">
+                    <div class="question-number">R<span id="game5RoundNum">1</span>/5</div>
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 8px; margin-bottom: 15px;">
+                        <p>👨‍💼 우리 회사 매출: <strong id="game5MyRevenue">100만원</strong></p>
+                        <p>👥 경쟁사 매출: <strong id="game5CompRevenue">200만원</strong></p>
+                    </div>
+                    <div class="question-text" id="game5Question"></div>
+                    <div class="choice-options" id="game5Options"></div>
+                    <button class="submit-btn" onclick="submitGame5Choice()" id="game5SubmitBtn">전략 선택</button>
+                    <div class="feedback" id="game5Feedback"></div>
+                </div>
+            </div>
+
+            <button class="sos-btn" onclick="callSOS('Game5')">🆘 SOS</button>
+        </div>
+
+        <!-- ============ RESULT PAGE ============ -->
+        <div class="page result-page">
+            <div class="result-title">🎉 게임 완료!</div>
+            
+            <div class="result-card">
+                <div class="final-score" id="finalScore">0</div>
+                <div class="score-label">최종 점수</div>
+            </div>
+
+            <div class="result-details">
+                <div class="detail-item">
+                    <div class="detail-label">게임명</div>
+                    <div class="detail-value" id="resultGameName">-</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">소요시간</div>
+                    <div class="detail-value" id="resultTime">-</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">정답률</div>
+                    <div class="detail-value" id="resultAccuracy">-</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">성취도</div>
+                    <div class="detail-value" id="resultAchievement">-</div>
+                </div>
+            </div>
+
+            <p style="color: #666; margin-bottom: 20px; font-size: 1.1em;">
+                <strong>💡 배운점:</strong> 각 게임을 통해 경영 의사결정의 중요성을 이해했습니다!
+            </p>
+
+            <button class="back-btn" onclick="backToGameSelection()">다른 게임 도전하기</button>
+            <button class="back-btn" style="background: #6c757d; margin-left: 10px;" onclick="logout()">나가기</button>
+        </div>
+
+        <!-- ============ PROFESSOR DASHBOARD ============ -->
+        <div class="page professor-dashboard">
+            <h1>👨‍🏫 교수자 대시보드</h1>
+            
+            <div style="margin-bottom: 30px;">
+                <button class="back-btn" style="width: auto; margin-right: 10px;" onclick="refreshDashboard()">🔄 새로고침</button>
+                <button class="back-btn" style="background: #6c757d; width: auto;" onclick="logoutProfessor()">나가기</button>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em; color: #667eea; font-weight: bold;" id="totalStudents">0</div>
+                    <div style="color: #999;">총 학생 수</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em; color: #28a745; font-weight: bold;" id="completedCount">0</div>
+                    <div style="color: #999;">게임 완료</div>
+                </div>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; text-align: center;">
+                    <div style="font-size: 2em; color: #ffc107; font-weight: bold;" id="sosCount">0</div>
+                    <div style="color: #999;">SOS 요청</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h2 style="color: #667eea; margin-bottom: 20px;">📊 학생 진행 상황</h2>
+                <div id="studentsList" style="display: grid; grid-template-columns: 1fr; gap: 15px;"></div>
+            </div>
+
+            <div>
+                <h2 style="color: #667eea; margin-bottom: 20px;">🆘 SOS 요청 현황</h2>
+                <div id="sosList" style="display: grid; grid-template-columns: 1fr; gap: 15px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database.js"></script>
+
+    <script>
+        // ============ FIREBASE INITIALIZATION ============
+        // 🔴 여기에 당신의 Firebase 설정을 붙여넣으세요!
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+
+        // Firebase 초기화
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // Firebase 연결 상태 모니터링
+        const connectedRef = database.ref('.info/connected');
+        connectedRef.on('value', (snap) => {
+            const statusEl = document.getElementById('firebaseStatus');
+            if (snap.val() === true) {
+                statusEl.textContent = '🟢 Firebase 연결됨';
+                statusEl.classList.remove('disconnected');
+                statusEl.classList.add('connected');
+            } else {
+                statusEl.textContent = '🔴 Firebase 연결 끊김';
+                statusEl.classList.remove('connected');
+                statusEl.classList.add('disconnected');
+            }
+        });
+
+        // ============ GAME DATA ============
+        const gameData = {
+            1: {
+                name: '마진율 퀴즈 레이싱',
+                questions: [
+                    {
+                        text: 'A상품: 원가 5,000원 → 판매가 10,000원, 마진율은?',
+                        options: ['50%', '100%', '150%', '75%'],
+                        correct: 1
+                    },
+                    {
+                        text: 'B상품: 원가 20,000원 → 판매가 25,000원, 마진율은?',
+                        options: ['20%', '25%', '30%', '15%'],
+                        correct: 0
+                    },
+                    {
+                        text: 'C상품: 원가 40,000원 → 판매가 48,000원, 마진율은?',
+                        options: ['15%', '20%', '25%', '10%'],
+                        correct: 1
+                    },
+                    {
+                        text: 'D상품: 원가 1,000원 → 판매가 3,000원, 마진율은?',
+                        options: ['100%', '150%', '200%', '250%'],
+                        correct: 2
+                    },
+                    {
+                        text: 'E상품: 원가 80,000원 → 판매가 96,000원, 마진율은?',
+                        options: ['15%', '20%', '25%', '10%'],
+                        correct: 1
+                    }
+                ]
+            },
+            2: {
+                name: '가상기업 자원배분',
+                scenarios: [
+                    {
+                        situation: '경기 호황 시기',
+                        question: '초기 자금 1,000만원을 어디에 투자할까요?',
+                        choices: [
+                            { text: '광고에 집중 (700만)', effect: '+30% 매출, -10% 기술' },
+                            { text: 'R&D 투자 (700만)', effect: '+20% 기술, -5% 단기매출' },
+                            { text: '인력 채용 (700만)', effect: '+15% 모든 지표' },
+                            { text: '균형 투자 (300/350/350)', effect: '+15% 균형있는 성장' }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        situation: '경기 침체 시기',
+                        question: '자금 확보 후 어디를 우선으로?',
+                        choices: [
+                            { text: '광고는 최소화', effect: '-5% 매출, +10% 현금' },
+                            { text: 'R&D는 계속', effect: '향후 경쟁력 +20%' },
+                            { text: '인력 감원', effect: '+5% 이윤, -10% 역량' },
+                            { text: '모든 영역 축소', effect: '생존, 회복 지연' }
+                        ],
+                        correct: 1
+                    },
+                    {
+                        situation: '신제품 출시 예정',
+                        question: '투자 전략은?',
+                        choices: [
+                            { text: '광고에 900만 투자', effect: '빠른 성장, 높은 위험' },
+                            { text: 'R&D에 900만 투자', effect: '품질 우수, 느린 시장진입' },
+                            { text: '균형 투자 (450/450)', effect: '안정적 성장' },
+                            { text: '현금 보유', effect: '기회상실' }
+                        ],
+                        correct: 2
+                    },
+                    {
+                        situation: '경쟁사 대응 필요',
+                        question: '경쟁사 공격에 어떻게 대응?',
+                        choices: [
+                            { text: '광고 전쟁 (800만)', effect: '단기 효과, 장기 약화' },
+                            { text: '기술혁신 (800만)', effect: '차별화, 시간 필요' },
+                            { text: '가격인하 (800만)', effect: '판매증가, 이윤감소' },
+                            { text: '균형 대응', effect: '안정적 지속성' }
+                        ],
+                        correct: 1
+                    },
+                    {
+                        situation: '성공 후 확장 기회',
+                        question: '성장을 위한 최고의 전략은?',
+                        choices: [
+                            { text: '매장 확대 (인력)', effect: '빠른 확장' },
+                            { text: '기술 고도화 (R&D)', effect: '경쟁력 강화' },
+                            { text: '브랜드 강화 (광고)', effect: '이미지 개선' },
+                            { text: '소수정예 운영', effect: '높은 이윤율' }
+                        ],
+                        correct: 1
+                    }
+                ]
+            },
+            3: {
+                name: '타이밍 경영 선택',
+                scenarios: [
+                    {
+                        market: '📈 호황기',
+                        question: '시장이 활발합니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '공격적으로 재고 증가', effect: '위험도 높음, 수익 +50%' },
+                            { text: '가격 유지 & 판매 극대화', effect: '위험도 중간, 수익 +30%' },
+                            { text: '안정적으로 가격 유지', effect: '위험도 낮음, 수익 +15%' },
+                            { text: '신제품 개발에 집중', effect: '장기수익 +40%' }
+                        ],
+                        correct: 1
+                    },
+                    {
+                        market: '📉 불황기',
+                        question: '시장이 침체되었습니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '적극적 할인 판매', effect: '판매량 증가, 이윤 감소' },
+                            { text: '가격 유지 & 고객 관리', effect: '균형있는 대응' },
+                            { text: '신상품 런칭', effect: '새로운 기회' },
+                            { text: '현금 보유', effect: '안전, 기회상실' }
+                        ],
+                        correct: 1
+                    },
+                    {
+                        market: '🔄 변동기',
+                        question: '시장이 계속 변합니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '빠르게 대응하기', effect: '기회 포착' },
+                            { text: '추세 분석하기', effect: '신중한 판단' },
+                            { text: '가격 조정하기', effect: '경쟁력 유지' },
+                            { text: '관망하기', effect: '기회상실' }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        market: '⭐ 확장기',
+                        question: '시장이 크게 확대됩니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '시장점유율 확보 (공격)', effect: '장기 우위' },
+                            { text: '이윤 우선 (방어)', effect: '단기 수익성' },
+                            { text: '기술 투자', effect: '경쟁력 강화' },
+                            { text: '현상 유지', effect: '기회상실' }
+                        ],
+                        correct: 0
+                    },
+                    {
+                        market: '⚡ 급변기',
+                        question: '규칙이 바뀝니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '새 규칙 학습 & 빠른 적응', effect: '선도 기업' },
+                            { text: '기존 방식 유지', effect: '뒤처짐' },
+                            { text: '로비활동', effect: '리스크 증가' },
+                            { text: '시장 재진입 준비', effect: '늦은 대응' }
+                        ],
+                        correct: 0
+                    }
+                ]
+            },
+            4: {
+                name: '고객만족도 게임',
+                scenarios: [
+                    {
+                        complaints: [
+                            { issue: '배송 지연', severity: '높음' },
+                            { issue: '제품 품질 문제', severity: '높음' },
+                            { issue: 'A/S 응답 지연', severity: '중간' }
+                        ],
+                        question: '어떤 문제를 먼저 해결할까요?',
+                        choices: [
+                            { text: '배송 지연 개선', effect: '+20% 만족도' },
+                            { text: '품질 문제 해결', effect: '+25% 만족도 (최고)' },
+                            { text: 'A/S 개선', effect: '+10% 만족도' },
+                            { text: '세 가지 모두', effect: '+50% 만족도' }
+                        ],
+                        correct: 1,
+                        currentSatisfaction: 70
+                    },
+                    {
+                        complaints: [
+                            { issue: '가격이 비쌈', severity: '높음' },
+                            { issue: '배송 느림', severity: '중간' },
+                            { issue: '상품 다양성 부족', severity: '중간' }
+                        ],
+                        question: '고객들이 불만입니다. 우선순위는?',
+                        choices: [
+                            { text: '가격 인하', effect: '+30% 만족도' },
+                            { text: '배송 속도 개선', effect: '+15% 만족도' },
+                            { text: '상품 다양화', effect: '+20% 만족도' },
+                            { text: '모두 함께 개선', effect: '+65% 만족도' }
+                        ],
+                        correct: 0,
+                        currentSatisfaction: 60
+                    },
+                    {
+                        complaints: [
+                            { issue: '고객 상담 부재', severity: '높음' },
+                            { issue: '반품 절차 복잡', severity: '중간' },
+                            { issue: '제품 정보 부족', severity: '중간' }
+                        ],
+                        question: '서비스 개선이 필요합니다. 어떻게?',
+                        choices: [
+                            { text: '24시간 상담 개설', effect: '+30% 만족도' },
+                            { text: '반품 절차 간소화', effect: '+20% 만족도' },
+                            { text: '상세 정보 제공', effect: '+15% 만족도' },
+                            { text: '전체 개선', effect: '+65% 만족도' }
+                        ],
+                        correct: 0,
+                        currentSatisfaction: 65
+                    },
+                    {
+                        complaints: [
+                            { issue: '선주문 품절 빈번', severity: '높음' },
+                            { issue: '배송 손상', severity: '높음' },
+                            { issue: '보상 정책 불명확', severity: '중간' }
+                        ],
+                        question: '심각한 문제들입니다. 우선 순위?',
+                        choices: [
+                            { text: '재고 관리 개선', effect: '+25% 만족도' },
+                            { text: '배송 포장 강화', effect: '+22% 만족도' },
+                            { text: '보상 정책 명확화', effect: '+18% 만족도' },
+                            { text: '모두 함께 해결', effect: '+70% 만족도' }
+                        ],
+                        correct: 3,
+                        currentSatisfaction: 50
+                    },
+                    {
+                        complaints: [
+                            { issue: '브랜드 이미지 하락', severity: '높음' },
+                            { issue: '단골 고객 감소', severity: '높음' },
+                            { issue: '리뷰 평점 저하', severity: '높음' }
+                        ],
+                        question: '위기 상황입니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '광고 캠페인 강화', effect: '+20% 만족도' },
+                            { text: '로열티 프로그램 개설', effect: '+25% 만족도' },
+                            { text: '품질 개선 집중', effect: '+30% 만족도' },
+                            { text: '전체 이미지 혁신', effect: '+75% 만족도' }
+                        ],
+                        correct: 3,
+                        currentSatisfaction: 40
+                    }
+                ]
+            },
+            5: {
+                name: '경쟁사 추격 게임',
+                scenarios: [
+                    {
+                        myRevenue: 100,
+                        compRevenue: 200,
+                        question: '경쟁사가 2배 앞서 있습니다. 어떻게 할까요?',
+                        choices: [
+                            { text: '공격적 가격인하 (공격)', effect: '매출 +50%, 이윤 -20%' },
+                            { text: '기술 차별화 (전략)', effect: '매출 +30%, 이윤 +10%' },
+                            { text: '서비스 개선 (안정)', effect: '매출 +20%, 이윤 +5%' },
+                            { text: '모든 영역 강화 (적극)', effect: '매출 +35%, 이윤 -5%' }
+                        ],
+                        correctRisk: 'medium'
+                    },
+                    {
+                        myRevenue: 120,
+                        compRevenue: 180,
+                        question: '격차가 줄어들었습니다. 다음 전략은?',
+                        choices: [
+                            { text: '공격력 유지', effect: '매출 +40%, 위험도 높음' },
+                            { text: '기술 강화', effect: '장기 경쟁력 +50%' },
+                            { text: '고객 충성도', effect: '안정적 성장 +25%' },
+                            { text: '시장 확대', effect: '새로운 기회 +30%' }
+                        ],
+                        correctRisk: 'low'
+                    },
+                    {
+                        myRevenue: 150,
+                        compRevenue: 160,
+                        question: '거의 따라잡았습니다!',
+                        choices: [
+                            { text: '마지막 공격 (고위험)', effect: '앞추 가능 +60%, 손실 -40%' },
+                            { text: '균형있는 추격', effect: '앞추 가능 +40%, 안정성 높음' },
+                            { text: '차별화 전략', effect: '앞추 가능 +35%, 경쟁력 강화' },
+                            { text: '인수합병 검토', effect: '즉시 1위' }
+                        ],
+                        correctRisk: 'medium'
+                    },
+                    {
+                        myRevenue: 180,
+                        compRevenue: 150,
+                        question: '우리가 앞질렀습니다!',
+                        choices: [
+                            { text: '공격 계속', effect: '더 앞서기, 경쟁 심화' },
+                            { text: '이윤 우선', effect: '단기 수익성 +40%' },
+                            { text: '기술 투자', effect: '장기 우위 구축' },
+                            { text: '시장 지배력', effect: '1위 유지 +80%' }
+                        ],
+                        correctRisk: 'low'
+                    },
+                    {
+                        myRevenue: 200,
+                        compRevenue: 100,
+                        question: '우리가 압도적 1위가 되었습니다!',
+                        choices: [
+                            { text: '공격적 확장', effect: '시장 지배, 규제 리스크' },
+                            { text: '혁신에 집중', effect: '경쟁력 지속' },
+                            { text: '새로운 시장 진출', effect: '+30% 추가 성장' },
+                            { text: '고객 만족 최우선', effect: '1위 유지, 안정성 +50%' }
+                        ],
+                        correctRisk: 'high'
+                    }
+                ]
+            }
+        };
+
+        // ============ STATE MANAGEMENT ============
+        let currentGame = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let totalAnswered = 0;
+        let correctAnswers = 0;
+        let gameStartTime = null;
+        let gameEndTime = null;
+        let timerInterval = null;
+        let timeLeft = 120;
+        let selectedAnswer = null;
+        let userMode = 'student'; // 'student' 또는 'professor'
+        let studentInfo = {
+            name: '',
+            school: '',
+            email: '',
+            sessionId: ''
+        };
+        let professorMode = false;
+
+        // ============ PAGE NAVIGATION ============
+        function showPage(pageClass) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelector(pageClass).classList.add('active');
+        }
+
+        function selectMode(mode) {
+            userMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.closest('.mode-btn').classList.add('selected');
+
+            if (mode === 'student') {
+                document.getElementById('studentForm').style.display = 'block';
+                document.getElementById('professorForm').style.display = 'none';
+            } else {
+                document.getElementById('studentForm').style.display = 'none';
+                document.getElementById('professorForm').style.display = 'block';
+            }
+        }
+
+        function loginStudent() {
+            const name = document.getElementById('studentName').value.trim();
+            const school = document.getElementById('highSchool').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!name || !school || !email) {
+                alert('모든 정보를 입력해주세요!');
+                return;
+            }
+
+            studentInfo = { 
+                name, 
+                school, 
+                email,
+                sessionId: generateSessionId()
+            };
+            
+            // Firebase에 학생 정보 저장
+            database.ref('students/' + studentInfo.sessionId).set({
+                name: name,
+                school: school,
+                email: email,
+                loginTime: new Date().toISOString(),
+                status: 'active',
+                currentGame: 'none',
+                score: 0,
+                sosRequests: []
+            });
+
+            document.getElementById('welcomeName').textContent = name;
+            document.getElementById('welcomeSchool').textContent = school;
+            document.getElementById('welcomeEmail').textContent = email;
+
+            showPage('.welcome-page');
+        }
+
+        function loginProfessor() {
+            const code = document.getElementById('professorCode').value.trim();
+            
+            // 간단한 코드 검증 (실제로는 더 복잡한 인증이 필요)
+            if (code === '1234') {
+                professorMode = true;
+                loadProfessorDashboard();
+                showPage('.professor-dashboard');
+            } else {
+                alert('교수자 코드가 올바르지 않습니다.');
+            }
+        }
+
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        function goToGameSelection() {
+            showPage('.game-selection');
+        }
+
+        function backToGameSelection() {
+            currentGame = null;
+            currentQuestion = 0;
+            selectedAnswer = null;
+            if (timerInterval) clearInterval(timerInterval);
+            showPage('.game-selection');
+        }
+
+        function logout() {
+            // Firebase에서 학생 상태 업데이트
+            database.ref('students/' + studentInfo.sessionId + '/status').set('completed');
+
+            currentGame = null;
+            currentQuestion = 0;
+            score = 0;
+            selectedAnswer = null;
+            if (timerInterval) clearInterval(timerInterval);
+            
+            document.getElementById('studentName').value = '';
+            document.getElementById('highSchool').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('professorCode').value = '';
+            
+            showPage('.login-page');
+        }
+
+        function logoutProfessor() {
+            professorMode = false;
+            document.getElementById('professorCode').value = '';
+            showPage('.login-page');
+        }
+
+        // ============ PROFESSOR DASHBOARD ============
+        function loadProfessorDashboard() {
+            // 학생 목록 실시간 수신
+            database.ref('students').on('value', (snapshot) => {
+                const students = snapshot.val() || {};
+                let totalCount = 0;
+                let completedCount = 0;
+                let sosCount = 0;
+                let studentsList = '';
+
+                for (let sessionId in students) {
+                    const student = students[sessionId];
+                    totalCount++;
+
+                    if (student.status === 'completed') {
+                        completedCount++;
+                    }
+
+                    studentsList += `
+                        <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; border-left: 4px solid ${
+                            student.status === 'completed' ? '#28a745' : '#ffc107'
+                        }">
+                            <strong>${student.name}</strong> (${student.school})<br>
+                            📧 ${student.email}<br>
+                            <div style="margin-top: 10px; font-size: 0.9em;">
+                                상태: <span style="color: ${student.status === 'completed' ? '#28a745' : '#ffc107'}">${
+                                    student.status === 'completed' ? '✅ 완료' : '🔄 진행 중'
+                                }</span>
+                                | 점수: <strong>${student.score || 0}점</strong>
+                                | 게임: ${student.currentGame || 'none'}
+                            </div>
+                        </div>
+                    `;
+
+                    if (student.sosRequests && student.sosRequests.length > 0) {
+                        sosCount += student.sosRequests.length;
+                    }
+                }
+
+                document.getElementById('totalStudents').textContent = totalCount;
+                document.getElementById('completedCount').textContent = completedCount;
+                document.getElementById('sosCount').textContent = sosCount;
+                document.getElementById('studentsList').innerHTML = studentsList || '<p>학생이 없습니다.</p>';
+            });
+
+            // SOS 요청 실시간 수신
+            database.ref('sos').on('value', (snapshot) => {
+                const sosRequests = snapshot.val() || {};
+                let sosList = '';
+
+                for (let requestId in sosRequests) {
+                    const request = sosRequests[requestId];
+                    sosList += `
+                        <div style="background: #ffe5e5; padding: 15px; border-radius: 10px; border-left: 4px solid #e74c3c;">
+                            <strong>🆘 ${request.studentName}</strong><br>
+                            게임: ${request.game}<br>
+                            시간: ${new Date(request.timestamp).toLocaleTimeString('ko-KR')}<br>
+                            <button class="back-btn" style="width: auto; margin-top: 10px;" onclick="resolveSOSRequest('${requestId}')">해결됨</button>
+                        </div>
+                    `;
+                }
+
+                document.getElementById('sosList').innerHTML = sosList || '<p>SOS 요청이 없습니다.</p>';
+            });
+        }
+
+        function refreshDashboard() {
+            loadProfessorDashboard();
+            alert('대시보드가 새로고침되었습니다!');
+        }
+
+        function resolveSOSRequest(requestId) {
+            database.ref('sos/' + requestId).remove();
+            alert('SOS 요청이 해결되었습니다.');
+        }
+
+        // ============ GAME INITIALIZATION ============
+        function startGame(gameNum) {
+            currentGame = gameNum;
+            currentQuestion = 0;
+            score = 0;
+            totalAnswered = 0;
+            correctAnswers = 0;
+            selectedAnswer = null;
+            timeLeft = 120;
+            gameStartTime = new Date();
+
+            // Firebase에 학생 게임 상태 업데이트
+            database.ref('students/' + studentInfo.sessionId).update({
+                currentGame: gameData[gameNum].name,
+                status: 'playing'
+            });
+
+            document.querySelectorAll('.game-page').forEach(p => p.style.display = 'none');
+            document.getElementById('game' + gameNum).style.display = 'block';
+            
+            showPage('#game' + gameNum);
+            
+            loadQuestion(gameNum, 0);
+            startTimer(gameNum);
+        }
+
+        function startTimer(gameNum) {
+            if (timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                const timeStr = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+                
+                document.getElementById('game' + gameNum + 'Timer').textContent = timeStr;
+                
+                if (timeLeft <= 0) {
+                    endGame(gameNum);
+                }
+            }, 1000);
+        }
+
+        function endGame(gameNum) {
+            if (timerInterval) clearInterval(timerInterval);
+            gameEndTime = new Date();
+            
+            const gameTime = Math.floor((gameEndTime - gameStartTime) / 1000);
+            const accuracy = totalAnswered > 0 ? Math.round((correctAnswers / totalAnswered) * 100) : 0;
+            const achievement = score >= 80 ? '⭐ 탁월' : score >= 60 ? '👍 우수' : score >= 40 ? '✌️ 좋음' : '📚 노력';
+
+            // Firebase에 게임 결과 저장
+            database.ref('students/' + studentInfo.sessionId).update({
+                score: score,
+                lastGame: gameData[gameNum].name,
+                lastGameScore: score,
+                accuracy: accuracy,
+                completedTime: new Date().toISOString()
+            });
+
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('resultGameName').textContent = gameData[gameNum].name;
+            document.getElementById('resultTime').textContent = gameTime + '초';
+            document.getElementById('resultAccuracy').textContent = accuracy + '%';
+            document.getElementById('resultAchievement').textContent = achievement;
+
+            showPage('.result-page');
+        }
+
+        // ============ GAME 1: RACING QUIZ ============
+        function loadQuestion(gameNum, questionIndex) {
+            const game = gameData[gameNum];
+            currentQuestion = questionIndex;
+            selectedAnswer = null;
+
+            if (gameNum === 1) {
+                const q = game.questions[questionIndex];
+                document.getElementById('game1QuestionNum').textContent = questionIndex + 1;
+                document.getElementById('game1Question').textContent = q.text;
+                
+                const optionsHtml = q.options.map((opt, idx) => 
+                    `<button class="option-btn" onclick="selectGame1Option(${idx})">${opt}</button>`
+                ).join('');
+                document.getElementById('game1Options').innerHTML = optionsHtml;
+                
+                document.getElementById('game1Feedback').classList.remove('show', 'correct', 'incorrect');
+                document.getElementById('game1SubmitBtn').disabled = false;
+                document.getElementById('game1SubmitBtn').textContent = '답변 제출';
+            }
+        }
+
+        function selectGame1Option(optionIndex) {
+            selectedAnswer = optionIndex;
+            document.querySelectorAll('#game1Options .option-btn').forEach((btn, idx) => {
+                btn.classList.toggle('selected', idx === optionIndex);
+            });
+        }
+
+        function submitGame1Answer() {
+            if (selectedAnswer === null) {
+                alert('답을 선택해주세요!');
+                return;
+            }
+
+            const game = gameData[1];
+            const correct = selectedAnswer === game.questions[currentQuestion].correct;
+            
+            totalAnswered++;
+            if (correct) {
+                correctAnswers++;
+                score += 20;
+            }
+
+            const feedbackEl = document.getElementById('game1Feedback');
+            feedbackEl.textContent = correct ? '✅ 정답입니다!' : '❌ 틀렸습니다!';
+            feedbackEl.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+
+            document.getElementById('game1Score').textContent = score;
+            document.getElementById('game1SubmitBtn').disabled = true;
+
+            const progress = ((currentQuestion + 1) / 5) * 100;
+            document.getElementById('racingTrack').style.transform = `translateX(${progress * 2}px)`;
+
+            if (currentQuestion < game.questions.length - 1) {
+                document.getElementById('game1SubmitBtn').textContent = '다음 문제';
+                document.getElementById('game1SubmitBtn').onclick = () => {
+                    loadQuestion(1, currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game1SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game1SubmitBtn').onclick = () => endGame(1);
+            }
+        }
+
+        // ============ GAME 2: RESOURCE ALLOCATION ============
+        function loadGame2Question(questionIndex) {
+            const game = gameData[2];
+            const scenario = game.scenarios[questionIndex];
+            currentQuestion = questionIndex;
+            selectedAnswer = null;
+
+            document.getElementById('game2Scenario').textContent = scenario.question;
+            document.getElementById('game2Situation').textContent = scenario.situation;
+            document.getElementById('game2Budget').textContent = '1,000만원';
+
+            const choicesHtml = scenario.choices.map((choice, idx) => 
+                `<div class="choice-option" onclick="selectGame2Choice(${idx})">
+                    <span>${choice.text}</span>
+                    <span class="choice-risk">${choice.effect}</span>
+                </div>`
+            ).join('');
+            document.getElementById('game2Options').innerHTML = choicesHtml;
+
+            document.getElementById('game2Feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('game2SubmitBtn').disabled = false;
+            document.getElementById('game2SubmitBtn').textContent = '선택 완료';
+        }
+
+        function selectGame2Choice(optionIndex) {
+            selectedAnswer = optionIndex;
+            document.querySelectorAll('#game2Options .choice-option').forEach((el, idx) => {
+                el.classList.toggle('selected', idx === optionIndex);
+            });
+        }
+
+        function submitGame2Choice() {
+            if (selectedAnswer === null) {
+                alert('선택지를 선택해주세요!');
+                return;
+            }
+
+            const game = gameData[2];
+            const correct = selectedAnswer === game.scenarios[currentQuestion].correct;
+            
+            totalAnswered++;
+            if (correct) {
+                correctAnswers++;
+                score += 20;
+            }
+
+            const feedbackEl = document.getElementById('game2Feedback');
+            feedbackEl.textContent = correct ? '✅ 훌륭한 선택입니다!' : '⚠️ 다른 선택지도 고려해보세요!';
+            feedbackEl.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+
+            document.getElementById('game2Score').textContent = score;
+            document.getElementById('game2SubmitBtn').disabled = true;
+
+            if (currentQuestion < game.scenarios.length - 1) {
+                document.getElementById('game2SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game2SubmitBtn').onclick = () => {
+                    loadGame2Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game2SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game2SubmitBtn').onclick = () => endGame(2);
+            }
+        }
+
+        // ============ GAME 3: TIMING CHOICE ============
+        function loadGame3Question(questionIndex) {
+            const game = gameData[3];
+            const scenario = game.scenarios[questionIndex];
+            currentQuestion = questionIndex;
+            selectedAnswer = null;
+
+            document.getElementById('game3QuestionNum').textContent = questionIndex + 1;
+            document.getElementById('game3MarketStatus').textContent = scenario.market;
+            document.getElementById('game3Question').textContent = scenario.question;
+
+            const choicesHtml = scenario.choices.map((choice, idx) => 
+                `<div class="choice-option" onclick="selectGame3Choice(${idx})">
+                    <span>${choice.text}</span>
+                    <span class="choice-risk">${choice.effect}</span>
+                </div>`
+            ).join('');
+            document.getElementById('game3Options').innerHTML = choicesHtml;
+
+            document.getElementById('game3Feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('game3SubmitBtn').disabled = false;
+        }
+
+        function selectGame3Choice(optionIndex) {
+            selectedAnswer = optionIndex;
+            document.querySelectorAll('#game3Options .choice-option').forEach((el, idx) => {
+                el.classList.toggle('selected', idx === optionIndex);
+            });
+        }
+
+        function submitGame3Choice() {
+            if (selectedAnswer === null) {
+                alert('선택지를 선택해주세요!');
+                return;
+            }
+
+            const game = gameData[3];
+            const correct = selectedAnswer === game.scenarios[currentQuestion].correct;
+            
+            totalAnswered++;
+            if (correct) {
+                correctAnswers++;
+                score += 20;
+            }
+
+            const feedbackEl = document.getElementById('game3Feedback');
+            feedbackEl.textContent = correct ? '✅ 완벽한 타이밍입니다!' : '⚠️ 다른 선택을 고려해보세요!';
+            feedbackEl.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+
+            document.getElementById('game3Score').textContent = score;
+            document.getElementById('game3SubmitBtn').disabled = true;
+
+            if (currentQuestion < game.scenarios.length - 1) {
+                document.getElementById('game3SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game3SubmitBtn').onclick = () => {
+                    loadGame3Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game3SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game3SubmitBtn').onclick = () => endGame(3);
+            }
+        }
+
+        // ============ GAME 4: CUSTOMER SATISFACTION ============
+        function loadGame4Question(questionIndex) {
+            const game = gameData[4];
+            const scenario = game.scenarios[questionIndex];
+            currentQuestion = questionIndex;
+            selectedAnswer = null;
+
+            document.getElementById('game4QuestionNum').textContent = questionIndex + 1;
+            document.getElementById('game4CurrentScore').textContent = scenario.currentSatisfaction + '%';
+            document.getElementById('game4Progress').style.width = scenario.currentSatisfaction + '%';
+            document.getElementById('game4Progress').textContent = scenario.currentSatisfaction + '%';
+            document.getElementById('game4Question').textContent = scenario.question;
+
+            const choicesHtml = scenario.choices.map((choice, idx) => 
+                `<div class="choice-option" onclick="selectGame4Choice(${idx})">
+                    <span>${choice.text}</span>
+                    <span class="choice-risk">${choice.effect}</span>
+                </div>`
+            ).join('');
+            document.getElementById('game4Options').innerHTML = choicesHtml;
+
+            document.getElementById('game4Feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('game4SubmitBtn').disabled = false;
+        }
+
+        function selectGame4Choice(optionIndex) {
+            selectedAnswer = optionIndex;
+            document.querySelectorAll('#game4Options .choice-option').forEach((el, idx) => {
+                el.classList.toggle('selected', idx === optionIndex);
+            });
+        }
+
+        function submitGame4Choice() {
+            if (selectedAnswer === null) {
+                alert('선택지를 선택해주세요!');
+                return;
+            }
+
+            const game = gameData[4];
+            const correct = selectedAnswer === game.scenarios[currentQuestion].correct;
+            
+            totalAnswered++;
+            if (correct) {
+                correctAnswers++;
+                score += 20;
+            }
+
+            const feedbackEl = document.getElementById('game4Feedback');
+            feedbackEl.textContent = correct ? '✅ 최고의 우선순위 판단입니다!' : '⚠️ 다른 선택도 검토해보세요!';
+            feedbackEl.className = 'feedback show ' + (correct ? 'correct' : 'incorrect');
+
+            document.getElementById('game4Score').textContent = score;
+            document.getElementById('game4SubmitBtn').disabled = true;
+
+            if (currentQuestion < game.scenarios.length - 1) {
+                document.getElementById('game4SubmitBtn').textContent = '다음 상황';
+                document.getElementById('game4SubmitBtn').onclick = () => {
+                    loadGame4Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game4SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game4SubmitBtn').onclick = () => endGame(4);
+            }
+        }
+
+        // ============ GAME 5: COMPETITOR CHASE ============
+        function loadGame5Question(questionIndex) {
+            const game = gameData[5];
+            const scenario = game.scenarios[questionIndex];
+            currentQuestion = questionIndex;
+            selectedAnswer = null;
+
+            document.getElementById('game5RoundNum').textContent = questionIndex + 1;
+            document.getElementById('game5MyRevenue').textContent = scenario.myRevenue + '만원';
+            document.getElementById('game5CompRevenue').textContent = scenario.compRevenue + '만원';
+            document.getElementById('game5Question').textContent = scenario.question;
+
+            const choicesHtml = scenario.choices.map((choice, idx) => 
+                `<div class="choice-option" onclick="selectGame5Choice(${idx})">
+                    <span>${choice.text}</span>
+                    <span class="choice-risk">${choice.effect}</span>
+                </div>`
+            ).join('');
+            document.getElementById('game5Options').innerHTML = choicesHtml;
+
+            document.getElementById('game5Feedback').classList.remove('show', 'correct', 'incorrect');
+            document.getElementById('game5SubmitBtn').disabled = false;
+        }
+
+        function selectGame5Choice(optionIndex) {
+            selectedAnswer = optionIndex;
+            document.querySelectorAll('#game5Options .choice-option').forEach((el, idx) => {
+                el.classList.toggle('selected', idx === optionIndex);
+            });
+        }
+
+        function submitGame5Choice() {
+            if (selectedAnswer === null) {
+                alert('선택지를 선택해주세요!');
+                return;
+            }
+
+            totalAnswered++;
+            score += 20;
+            correctAnswers++;
+
+            const feedbackEl = document.getElementById('game5Feedback');
+            feedbackEl.textContent = '✅ 좋은 전략입니다!';
+            feedbackEl.className = 'feedback show correct';
+
+            document.getElementById('game5Score').textContent = score;
+            document.getElementById('game5SubmitBtn').disabled = true;
+
+            const game = gameData[5];
+            if (currentQuestion < game.scenarios.length - 1) {
+                document.getElementById('game5SubmitBtn').textContent = '다음 라운드';
+                document.getElementById('game5SubmitBtn').onclick = () => {
+                    loadGame5Question(currentQuestion + 1);
+                };
+            } else {
+                document.getElementById('game5SubmitBtn').textContent = '게임 완료';
+                document.getElementById('game5SubmitBtn').onclick = () => endGame(5);
+            }
+        }
+
+        // ============ SOS FUNCTION ============
+        function callSOS(game) {
+            const sosBtn = event.target;
+            
+            // Firebase에 SOS 요청 저장
+            const sosId = 'sos_' + Date.now();
+            database.ref('sos/' + sosId).set({
+                studentId: studentInfo.sessionId,
+                studentName: studentInfo.name,
+                game: game,
+                timestamp: new Date().toISOString(),
+                resolved: false
+            });
+
+            // 버튼 시각적 피드백
+            sosBtn.textContent = '✅ SOS 요청됨!';
+            sosBtn.classList.add('active');
+            
+            setTimeout(() => {
+                sosBtn.textContent = '🆘 SOS';
+                sosBtn.classList.remove('active');
+            }, 2000);
+
+            alert('🆘 SOS 요청이 교수님께 전달되었습니다!\n\n곧 도움을 받으실 수 있습니다.');
+        }
+    </script>
+</body>
+</html>
