@@ -1371,8 +1371,12 @@
             currentQuestion = questionIndex;
             selectedAnswer = null;
             
-            // 마지막 문제인지 확인
-            isLastQuestion = (questionIndex === game.questions.length - 1) || (questionIndex === game.scenarios.length - 1);
+            // 마지막 문제인지 확인 (questions 또는 scenarios 배열 존재 여부에 따라)
+            if (game.questions) {
+                isLastQuestion = (questionIndex === game.questions.length - 1);
+            } else if (game.scenarios) {
+                isLastQuestion = (questionIndex === game.scenarios.length - 1);
+            }
 
             if (gameNum === 1) {
                 const q = game.questions[questionIndex];
